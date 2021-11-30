@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:th="http://www.thymeleaf.org" >
+    <head th:replace="layout/plantilla::head">
+        <title>Lista de activos plaqueados</title>
+    </head>
+    <body>
+        <header></header>
+
+        <section>
+            <form th:action="@{/activo/guardar}" th:object="${activoobjeto}"
+                  method="POST" class="was-validated">
+                
+                <section>
+                    <div id="actions" class="py-4 mb-4 mt-4 bg-light">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-4 text-md-start text-sm-start">
+                                    <a th:href="@{/activo}" class="btn btn-ligth btn-block">
+                                        <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
+                                    </a>
+                                </div>
+                                <div class="col-md-4 text-md-center text-sm-start">
+                                    <button type="submit" class="btn btn-success btn-block">
+                                        <i class="fas fa-check"></i> [[#{accion.guardar}]]
+                                    </button>
+                                </div>
+                                <div class="col-md-4 text-md-start text-sm-start" th:if="${habilitareliminar == true}" >
+                                    <a th:href="@{/activo/eliminar/} + ${activoobjeto.activoPK.numeroJunta} + '/' +
+                                                                       ${activoobjeto.activoPK.numeroActivo}" 
+                                       class="btn btn-danger btn-block">
+                                        <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div id="details">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-header mt-4">
+                                        <h4>[[#{activo.editar}]]</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        
+                                        <!-- Placa -->
+                                        <div class="form-group mt-4 mb-4">
+                                            <label class="mb-2" for="activoPK.numeroJunta">[[#{activo.numero-junta}]]</label>
+                                            <input type="number" class="form-control" name="activoPK.numeroJunta" 
+                                                   th:field="*{activoPK.numeroJunta}" />
+                                        </div>
+                                        <div class="form-group mt-4 mb-4">
+                                            <label class="mb-2" for="activoPK.numeroActivo">[[#{activo.numero-activo}]]</label>
+                                            <input type="hidden" name="activoPK.numeroActivo" th:field="*{activoPK.numeroActivo}" />
+                                            <input type="number" class="form-control" name="activoPK.numeroActivoVisible"
+                                                   th:field="*{activoPK.numeroActivo}" disabled="disabled"/>
+                                        </div>
+                                        
+                                        <!-- Tomo/Folio/Asiento -->
+                                        <div class="form-group mt-4 mb-4">
+                                            <label class="mb-2" for="tomo">[[#{activo.tomo}]]</label>
+                                            <input type="number" class="form-control" name="tomo" 
+                                                   required="true" th:field="*{tomo}"/>
+                                        </div>
+                                        <div class="form-group mt-4 mb-4">
+                                            <label class="mb-2" for="folio">[[#{activo.folio}]]</label>
+                                            <input type="number" class="form-control" name="folio" 
+                                                   required="true" th:field="*{folio}"/>
+                                        </div>
+                                        <div class="form-group mt-4 mb-4">
+                                            <label class="mb-2" for="asiento">[[#{activo.asiento}]]</label>
+                                            <input type="number" class="form-control" name="asiento" 
+                                                   required="true" th:field="*{asiento}"/>
+                                        </div>
+                                        
+                                        <!-- Descripción Activo -->
+                                        <div class="form-group mt-4 mb-4">
+                                            <label class="mb-2" for="idDescripcionActivo">[[#{activo.descripcion-activo}]]</label>
+                                            <input type="text" class="form-control" name="idDescripcionActivo" 
+                                                   required="true" th:field="*{idDescripcionActivo}"/>
+                                        </div>
+                                        
+                                        <!-- Marca/Modelo/Serie -->
+                                        <div class="form-group mt-4 mb-4">
+                                            <label class="mb-2" for="marca">[[#{activo.marca}]]</label>
+                                            <input type="text" class="form-control" name="marca" 
+                                                   required="false" th:field="*{marca}"/>
+                                        </div>
+                                        <div class="form-group mt-4 mb-4">
+                                            <label class="mb-2" for="modelo">[[#{activo.modelo}]]</label>
+                                            <input type="text" class="form-control" name="modelo" 
+                                                   required="false" th:field="*{modelo}"/>
+                                        </div>
+                                        <div class="form-group mt-4 mb-4">
+                                            <label class="mb-2" for="serie">[[#{activo.serie}]]</label>
+                                            <input type="text" class="form-control" name="serie" 
+                                                   required="false" th:field="*{serie}"/>
+                                        </div>
+                                        
+                                        <!-- Otros Atributos -->
+                                        <div class="form-group mt-4 mb-4">
+                                            <label class="mb-2" for="enReparacion">[[#{activo.en-reparacion}]]</label>
+                                            <input type="text" class="form-control" name="enReparacion" 
+                                                   required="false" th:field="*{enReparacion}"/>
+                                        </div>
+                                        <div class="form-group mt-4 mb-4">
+                                            <label class="mb-2" for="idEstadoActivo">[[#{activo.estado-activo}]]</label>
+                                            <input type="text" class="form-control" name="idEstadoActivo" 
+                                                   required="false" th:field="*{idEstadoActivo}"/>
+                                        </div>
+                                        <div class="form-group mt-4 mb-4">
+                                            <label class="mb-2" for="idNumeroAula">[[#{activo.numero-aula}]]</label>
+                                            <input type="text" class="form-control" name="idNumeroAula" 
+                                                   required="false" th:field="*{idNumeroAula}"/>
+                                        </div>
+                                        <div class="form-group mt-4 mb-4">
+                                            <label class="mb-2" for="idModoAdquisicion">[[#{activo.modo-adquisicion}]]</label>
+                                            <input type="text" class="form-control" name="idModoAdquisicion" 
+                                                   required="false" th:field="*{idModoAdquisicion}"/>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+
+        <footer></footer>        
+    </body>
+</html>
