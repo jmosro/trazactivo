@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:th="http://www.thymeleaf.org" >
+    <head>
+        <title>Tipos de anotación para activos plaqueados</title>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+        <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css}"/>
+        <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+        <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+        <!-- Datatables dependencias
+        https://datatables.net/download/index
+        Step 1. Choose a styling framework: Bootstrap 5
+        Step 2. Select packages: DataTables
+        Extensions: Buttons[Column, HTML5 export[JSZip, pdfmake],
+        Print view], Responsive
+        -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.11.3/b-2.0.1/b-colvis-2.0.1/b-html5-2.0.1/b-print-2.0.1/r-2.2.9/datatables.min.css"/>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.11.3/b-2.0.1/b-colvis-2.0.1/b-html5-2.0.1/b-print-2.0.1/r-2.2.9/datatables.min.js"></script>
+        
+        <script>
+            $(document).ready(function () {
+                $('#miTabla').DataTable({
+                    dom: "<'row'<'col-md-12 mb-2 mt-2'B>>" +
+                            "<'row'<'col-md-6'l><'col-md-6'f>>" +
+                            "rt" +
+                            "<'row'<'col-md-6'i><'col-md-6'p>>",
+                    buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+                    lengthMenu: [10, 25, 50, "All"]
+                });
+            });
+            /*
+             dom: 'Blfrtip'
+             dom: '<"top"i>rt<"bottom"flp><"clear">'
+             B - Buttons | R - ColReorder | S - Scroller
+             P - SearchPanes | Q - SearchBuilder
+             f - filtering input
+             r - processing display element
+             t - The table!
+             i - Table information summary
+             l - length changing input control
+             p - pagination control     
+             */
+        </script>
+    </head>
+
+    <body>
+        <header th:replace="layout/plantilla :: header"></header>
+
+
+        <section class="py-4 mb-4 bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12"> <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
+                        <a th:href="@{/tipoanotacion/agregar}" class="btn btn-primary btn-block" 
+                           data-toggle="modal" data-target="#agregarNuevo">
+                            <i class="fas fa-plus"></i> [[#{accion.agregar}]]
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header mt-4">
+                                <h4>[[#{tipoAnotacion.titulo-lista}]]</h4>
+                            </div>
+                            <div th:if="${tipoanotaciontodo != null and !tipoanotaciontodo.empty}">
+                                <table id="miTabla" class="table table-stryped">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>#</th>
+                                            <th th:text="#{generico.id}">Id</th>
+                                            <th th:text="#{generico.detalle}">Detalle</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="objeto, contador : ${tipoanotaciontodo}">
+                                            <td>[[${contador.count}]]</td>
+                                            <td>[[${objeto.idTipoAnotacion}]]</td>
+                                            <td>[[${objeto.detalleTipoAnotacion}]]</td>
+                                            <td>
+                                                <a th:href="@{/tipoanotacion/editar/} + ${objeto.idTipoAnotacion}"
+                                                   class="btn btn-warning"><!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
+                                                    <i class="fas fa-angle-double-right"></i> [[#{accion.editar}]]
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a th:href="@{/tipoanotacion/eliminar(idTipoAnotacion=${objeto.idTipoAnotacion})}"
+                                                   class="btn btn-danger"> <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
+                                                    <i class="fas fa-angle-double-right"></i> [[#{accion.eliminar}]]
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center p-2" th:if="${tipoanotaciontodo == null or tipoanotaciontodo.empty}">
+                                <span th:text="#{tipoAnotacion.lista-vacia}">Lista vacía</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </section>
+
+        <footer th:replace="layout/plantilla :: footer"></footer>
+    </body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:th="http://www.thymeleaf.org" >
+    <head th:replace="layout/plantilla::head">
+        <title>Especialidades académicas donde se ubican los activos plaqueados</title>
+    </head>
+    <body>
+        <header></header>
+
+        <section>
+            <form th:action="@{/especialidadacademica/guardar}" th:object="${especialidadacademicaobjeto}"
+                  method="POST" class="was-validated">
+                
+                <section>
+                    <div id="actions" class="py-4 mb-4 mt-4 bg-light">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-4 text-md-start text-sm-start">
+                                    <a th:href="@{/especialidadacademica}" class="btn btn-ligth btn-block">
+                                        <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
+                                    </a>
+                                </div>
+                                <div class="col-md-4 text-md-center text-sm-start">
+                                    <button type="submit" class="btn btn-success btn-block">
+                                        <i class="fas fa-check"></i> [[#{accion.guardar}]]
+                                    </button>
+                                </div>
+                                <div class="col-md-4 text-md-start text-sm-start" th:if="${habilitareliminar == true}" >
+                                    <a th:href="@{/especialidadacademica/eliminar(idEspecialidadAcademica=${especialidadacademicaobjeto.idEspecialidadAcademica})}"
+                                       class="btn btn-danger btn-block">
+                                        <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div id="details">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-header mt-4">
+                                        <h4>[[#{especialidadAcademica.editar}]]</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group mt-4 mb-4">
+                                            <label class="mb-2" for="idEspecialidadAcademica">[[#{generico.id}]]</label>
+                                            <input type="hidden" name="idEspecialidadAcademica" th:field="*{idEspecialidadAcademica}" />
+                                            <input type="number" class="form-control" name="idEspecialidadAcademicaVisible"
+                                                   th:field="*{idEspecialidadAcademica}" disabled="disabled"/>
+                                        </div>
+                                        <div class="form-group mt-4 mb-4">
+                                            <label class="mb-2" for="detalleEspecialidadAcademica">[[#{generico.detalle}]]</label>
+                                            <input type="text" class="form-control" name="detalleEspecialidadAcademica" 
+                                                   required="true" th:field="*{detalleEspecialidadAcademica}"/>
+                                        </div>                    
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+
+        <footer></footer>        
+    </body>
+</html>
