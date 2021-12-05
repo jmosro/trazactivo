@@ -1,8 +1,43 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" 
       xmlns:th="http://www.thymeleaf.org" >
-    <head th:replace="layout/plantilla::head">
+    <head>
         <title>Tipos de descripciones de los activos plaqueados</title>
+        <meta charset="UTF-8"/>
+
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+        <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css}"/>
+        <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+        <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+        <!-- jquery-confirm -->
+        <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+
+        <script>
+            function confirmarEliminar(element) {
+                $.confirm({
+                    title: "Eliminar",
+                    content: "Está seguro de eliminar: " + "<br><br>" +
+                            "Id: " + element.getAttribute('data-id') + "<br>" +
+                            "Descripción: " + element.getAttribute('data-descripcion'),
+                    buttons: {
+                        eliminar: {
+                            text: "Eliminar",
+                            btnClass: "btn-danger",
+                            action: function () {
+                                location.replace("/descripcionactivo/eliminar/" + element.getAttribute('data-id'));
+                            }
+                        },
+                        cancelar: {
+                            text: "Cancelar"
+                        }
+                    }
+                });
+            }
+            ;
+        </script>
     </head>
     <body>
         <header></header>
@@ -10,7 +45,7 @@
         <section>
             <form th:action="@{/descripcionactivo/guardar}" th:object="${descripcionactivoobjeto}"
                   method="POST" class="was-validated">
-                
+
                 <section>
                     <div id="actions" class="py-4 mb-4 mt-4 bg-light">
                         <div class="container">
@@ -26,8 +61,10 @@
                                     </button>
                                 </div>
                                 <div class="col-md-4 text-md-start text-sm-start" th:if="${habilitareliminar == true}" >
-                                    <a th:href="@{/descripcionactivo/eliminar/} + ${descripcionactivoobjeto.idDescripcionActivo}"
-                                       class="btn btn-danger btn-block">
+                                    <a th:data-id="${descripcionactivoobjeto.idDescripcionActivo}"
+                                       th:data-descripcion="${descripcionactivoobjeto.detalleDescripcionActivo}"
+                                       class="btn btn-danger"
+                                       onclick="confirmarEliminar(this)" > <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
                                         <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
                                     </a>
                                 </div>

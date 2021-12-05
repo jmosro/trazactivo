@@ -41,7 +41,8 @@
                         }
                     }
                 });
-            };
+            }
+            ;
         </script>
     </head>
     <body>
@@ -66,18 +67,18 @@
                                     </button>
                                 </div>
                                 <div class="col-md-4 text-md-start text-sm-start" th:if="${habilitareliminar == true}">
-                                     <a th:if="${activoobjeto.descripcionActivo != null}"
-                                                   th:data-junta="${activoobjeto.activoPK.numeroJunta}"
-                                                   th:data-activo="${activoobjeto.activoPK.numeroActivo}"
-                                                   th:data-descripcion="${activoobjeto.descripcionActivo.detalleDescripcionActivo}"
-                                                   th:data-marca="${activoobjeto.marca}"
-                                                   th:data-modelo="${activoobjeto.modelo}"
-                                                   th:data-serie="${activoobjeto.serie}"
-                                                   class="btn btn-danger"
-                                                   onclick="confirmarEliminar(this)" > <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
-                                                    <i class="fas fa-angle-double-right"></i> [[#{accion.eliminar}]]
-                                     </a>
-                                    
+                                    <a th:if="${activoobjeto.descripcionActivo != null}"
+                                       th:data-junta="${activoobjeto.activoPK.numeroJunta}"
+                                       th:data-activo="${activoobjeto.activoPK.numeroActivo}"
+                                       th:data-descripcion="${activoobjeto.descripcionActivo.detalleDescripcionActivo}"
+                                       th:data-marca="${activoobjeto.marca}"
+                                       th:data-modelo="${activoobjeto.modelo}"
+                                       th:data-serie="${activoobjeto.serie}"
+                                       class="btn btn-danger"
+                                       onclick="confirmarEliminar(this)" > <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
+                                        <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                                    </a>
+
                                 </div>
                             </div>
                         </div>

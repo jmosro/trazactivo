@@ -4,6 +4,7 @@
     <head>
         <title>Tipos de descripciones de los activos plaqueados</title>
         <meta charset="UTF-8"/>
+
         <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
         <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css}"/>
         <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
@@ -21,7 +22,11 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.11.3/b-2.0.1/b-colvis-2.0.1/b-html5-2.0.1/b-print-2.0.1/r-2.2.9/datatables.min.js"></script>
-        
+
+        <!-- jquery-confirm -->
+        <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+
         <script>
             $(document).ready(function () {
                 $('#miTabla').DataTable({
@@ -45,6 +50,27 @@
              l - length changing input control
              p - pagination control     
              */
+            function confirmarEliminar(element) {
+                $.confirm({
+                    title: "Eliminar",
+                    content: "Está seguro de eliminar: " + "<br><br>" +
+                            "Id: " + element.getAttribute('data-id') + "<br>" +
+                            "Descripción: " + element.getAttribute('data-descripcion'),
+                    buttons: {
+                        eliminar: {
+                            text: "Eliminar",
+                            btnClass: "btn-danger",
+                            action: function () {
+                                location.replace("/descripcionactivo/eliminar/" + element.getAttribute('data-id'));
+                            }
+                        },
+                        cancelar: {
+                            text: "Cancelar"
+                        }
+                    }
+                });
+            }
+            ;
         </script>
     </head>
 
@@ -96,9 +122,11 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                <a th:href="@{/descripcionactivo/eliminar/} + ${objeto.idDescripcionActivo}"
-                                                   class="btn btn-danger"> <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
-                                                    <i class="fas fa-angle-double-right"></i> [[#{accion.eliminar}]]
+                                                <a th:data-id="${objeto.idDescripcionActivo}"
+                                                   th:data-descripcion="${objeto.detalleDescripcionActivo}"
+                                                   class="btn btn-danger"
+                                                   onclick="confirmarEliminar(this)" > <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
+                                                    <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
                                                 </a>
                                             </td>
                                         </tr>
