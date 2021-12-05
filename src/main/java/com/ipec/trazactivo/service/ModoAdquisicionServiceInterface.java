@@ -7,5 +7,5 @@ public interface ModoAdquisicionServiceInterface {
     public List<ModoAdquisicion> listarTodo();
     public void guardar(ModoAdquisicion modoAdquisicion);
     public void eliminar(ModoAdquisicion modoAdquisicion);
-    public ModoAdquisicion encontrarPorId(ModoAdquisicion modoAdquisicion);
+    public ModoAdquisicion encontrarPorId(Integer idModoAdquisicion);
 }

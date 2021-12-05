@@ -33,8 +33,8 @@ public class NumeroAulaServiceImpl implements NumeroAulaServiceInterface {
 
     @Override
     @Transactional(readOnly = true)
-    public NumeroAula encontrarPorId(NumeroAula numeroAula) {
-        return numeroAulaDao.findById(numeroAula.getIdNumeroAula()).orElse(null);
+    public NumeroAula encontrarPorId(Integer idNumeroAula) {
+        return numeroAulaDao.findById(idNumeroAula).orElse(null);
     }
     
 }

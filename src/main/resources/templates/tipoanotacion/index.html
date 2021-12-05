@@ -96,7 +96,7 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                <a th:href="@{/tipoanotacion/eliminar(idTipoAnotacion=${objeto.idTipoAnotacion})}"
+                                                <a th:href="@{/tipoanotacion/eliminar/} + ${objeto.idTipoAnotacion}"
                                                    class="btn btn-danger"> <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
                                                     <i class="fas fa-angle-double-right"></i> [[#{accion.eliminar}]]
                                                 </a>

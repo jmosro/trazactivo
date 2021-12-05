@@ -7,10 +7,13 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -31,14 +34,14 @@ public class TipoAnotacionController {
     }
     
     @GetMapping("/agregar")
-    public String agregar(TipoAnotacion tipoAnotacion, Model model) {
+    public String agregar(@ModelAttribute("tipoanotacionobjeto") TipoAnotacion tipoAnotacion, Model model) {
         model.addAttribute("tipoanotacionobjeto", tipoAnotacion);
         model.addAttribute("habilitareliminar", false);
         return "tipoanotacion/modificar";
     }
     
     @PostMapping("/guardar")
-    public String guardar(@Valid TipoAnotacion tipoAnotacion, Errors errores, Model model) {
+    public String guardar(@Valid @ModelAttribute("tipoanotacionobjeto") TipoAnotacion tipoAnotacion, Errors errores, Model model) {
         if(errores.hasErrors()) {
             model.addAttribute("habilitareliminar", true);
             return "tipoanotacion/modificar";
@@ -48,16 +51,23 @@ public class TipoAnotacionController {
     }
     
     @GetMapping("/editar/{idTipoAnotacion}")
-    public String editar(TipoAnotacion tipoAnotacion, Model model) {
-        tipoAnotacion = tipoAnotacionService.encontrarPorId(tipoAnotacion);
+    public String editar(@ModelAttribute("tipoanotacionobjeto") TipoAnotacion tipoAnotacion, Model model) {
+        tipoAnotacion = tipoAnotacionService.encontrarPorId(tipoAnotacion.getIdTipoAnotacion());
         model.addAttribute("tipoanotacionobjeto", tipoAnotacion);
         model.addAttribute("habilitareliminar", true);
         return "tipoanotacion/modificar";
     }
     
-    @GetMapping("/eliminar")
-    public String eliminar(TipoAnotacion tipoAnotacion) {
-        tipoAnotacionService.eliminar(tipoAnotacion);
+    @GetMapping("/eliminar/{numeroEliminar}")
+    public String eliminar(@PathVariable Integer numeroEliminar, Model model) {
+        TipoAnotacion anotacionObjeto = tipoAnotacionService.encontrarPorId(numeroEliminar);
+        try {
+            tipoAnotacionService.eliminar(anotacionObjeto);
+        } catch (DataIntegrityViolationException ex) {
+            model.addAttribute("tipoanotacionobjeto", anotacionObjeto);
+            model.addAttribute("errorEliminar", true);
+            return "tipoanotacion/modificar";
+        }
         return "redirect:/tipoanotacion";
     }
 }

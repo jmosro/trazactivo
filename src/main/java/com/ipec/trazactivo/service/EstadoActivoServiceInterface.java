@@ -7,5 +7,5 @@ public interface EstadoActivoServiceInterface {
     public List<EstadoActivo> listarTodo();
     public void guardar(EstadoActivo estadoActivo);
     public void eliminar(EstadoActivo estadoActivo);
-    public EstadoActivo encontrarPorId(EstadoActivo estadoActivo);
+    public EstadoActivo encontrarPorId(Integer idEstadoActivo);
 }

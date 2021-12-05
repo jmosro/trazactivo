@@ -7,5 +7,5 @@ public interface EspecialidadAcademicaServiceInterface {
     public List<EspecialidadAcademica> listarTodo();
     public void guardar(EspecialidadAcademica especialidadAcademica);
     public void eliminar(EspecialidadAcademica especialidadAcademica);
-    public EspecialidadAcademica encontrarPorId(EspecialidadAcademica especialidadAcademica);
+    public EspecialidadAcademica encontrarPorId(Integer idEspecialidadAcademica);
 }

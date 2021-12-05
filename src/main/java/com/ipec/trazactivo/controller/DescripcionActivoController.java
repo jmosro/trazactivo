@@ -7,10 +7,13 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -31,14 +34,14 @@ public class DescripcionActivoController {
     }
     
     @GetMapping("/agregar")
-    public String agregar(DescripcionActivo descripcionActivo, Model model) {
+    public String agregar(@ModelAttribute("descripcionactivoobjeto") DescripcionActivo descripcionActivo, Model model) {
         model.addAttribute("descripcionactivoobjeto", descripcionActivo);
         model.addAttribute("habilitareliminar", false);
         return "descripcionactivo/modificar";
     }
     
     @PostMapping("/guardar")
-    public String guardar(@Valid DescripcionActivo descripcionActivo, Errors errores, Model model) {
+    public String guardar(@Valid @ModelAttribute("descripcionactivoobjeto") DescripcionActivo descripcionActivo, Errors errores, Model model) {
         if(errores.hasErrors()) {
             model.addAttribute("habilitareliminar", true);
             return "descripcionactivo/modificar";
@@ -48,16 +51,23 @@ public class DescripcionActivoController {
     }
     
     @GetMapping("/editar/{idDescripcionActivo}")
-    public String editar(DescripcionActivo descripcionActivo, Model model) {
-        descripcionActivo = descripcionActivoService.encontrarPorId(descripcionActivo);
+    public String editar(@ModelAttribute("descripcionactivoobjeto") DescripcionActivo descripcionActivo, Model model) {
+        descripcionActivo = descripcionActivoService.encontrarPorId(descripcionActivo.getIdDescripcionActivo());
         model.addAttribute("descripcionactivoobjeto", descripcionActivo);
         model.addAttribute("habilitareliminar", true);
         return "descripcionactivo/modificar";
     }
     
-    @GetMapping("/eliminar")
-    public String eliminar(DescripcionActivo descripcionActivo) {
-        descripcionActivoService.eliminar(descripcionActivo);
+    @GetMapping("/eliminar/{numeroEliminar}")
+    public String eliminar(@PathVariable Integer numeroEliminar, Model model) {
+        DescripcionActivo descripcionObjeto = descripcionActivoService.encontrarPorId(numeroEliminar);
+        try {
+            descripcionActivoService.eliminar(descripcionObjeto);
+        } catch (DataIntegrityViolationException ex) {
+            model.addAttribute("descripcionactivoobjeto", descripcionObjeto);
+            model.addAttribute("errorEliminar", true);
+            return "descripcionactivo/modificar";
+        }
         return "redirect:/descripcionactivo";
     }
 }

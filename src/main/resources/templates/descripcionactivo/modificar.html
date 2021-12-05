@@ -26,7 +26,7 @@
                                     </button>
                                 </div>
                                 <div class="col-md-4 text-md-start text-sm-start" th:if="${habilitareliminar == true}" >
-                                    <a th:href="@{/descripcionactivo/eliminar(idDescripcionActivo=${descripcionactivoobjeto.idDescripcionActivo})}"
+                                    <a th:href="@{/descripcionactivo/eliminar/} + ${descripcionactivoobjeto.idDescripcionActivo}"
                                        class="btn btn-danger btn-block">
                                         <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
                                     </a>
@@ -55,6 +55,7 @@
                                             <label class="mb-2" for="detalleDescripcionActivo">[[#{generico.detalle}]]</label>
                                             <input type="text" class="form-control" name="detalleDescripcionActivo" 
                                                    required="true" th:field="*{detalleDescripcionActivo}"/>
+                                            <span class="text-danger" th:if="${errorEliminar == true}">[[#{generico.DataIntegrityViolationException}]]</span>
                                         </div>                    
                                     </div>
                                 </div>

@@ -33,8 +33,8 @@ public class EspecialidadAcademicaServiceImpl implements EspecialidadAcademicaSe
 
     @Override
     @Transactional(readOnly = true)
-    public EspecialidadAcademica encontrarPorId(EspecialidadAcademica especialidadAcademica) {
-        return especialidadAcademicaDao.findById(especialidadAcademica.getIdEspecialidadAcademica()).orElse(null);
+    public EspecialidadAcademica encontrarPorId(Integer idEspecialidadAcademica) {
+        return especialidadAcademicaDao.findById(idEspecialidadAcademica).orElse(null);
     }
     
 }

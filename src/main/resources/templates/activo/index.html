@@ -9,18 +9,22 @@
         <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
         <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
         <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-
+        
         <!-- Datatables dependencias
-        https://datatables.net/download/index
-        Step 1. Choose a styling framework: Bootstrap 5
-        Step 2. Select packages: DataTables
-        Extensions: Buttons[Column, HTML5 export[JSZip, pdfmake],
-        Print view], Responsive
+         https://datatables.net/download/index
+         Step 1. Choose a styling framework: Bootstrap 5
+         Step 2. Select packages: DataTables
+         Extensions: Buttons[Column, HTML5 export[JSZip, pdfmake],
+         Print view], Responsive, Scroller
         -->
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.11.3/b-2.0.1/b-colvis-2.0.1/b-html5-2.0.1/b-print-2.0.1/r-2.2.9/datatables.min.css"/>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.11.3/b-2.0.1/b-colvis-2.0.1/b-html5-2.0.1/b-print-2.0.1/r-2.2.9/sc-2.0.5/datatables.min.css"/>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-        <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.11.3/b-2.0.1/b-colvis-2.0.1/b-html5-2.0.1/b-print-2.0.1/r-2.2.9/datatables.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.11.3/b-2.0.1/b-colvis-2.0.1/b-html5-2.0.1/b-print-2.0.1/r-2.2.9/sc-2.0.5/datatables.min.js"></script>
+
+        <!-- jquery-confirm -->
+        <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
         
         <script>
             $(document).ready(function () {
@@ -30,7 +34,8 @@
                             "rt" +
                             "<'row'<'col-md-6'i><'col-md-6'p>>",
                     buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
-                    lengthMenu: [10, 25, 50, "All"]
+                    scrollX: true
+
                 });
             });
             /*
@@ -45,7 +50,34 @@
              l - length changing input control
              p - pagination control     
              */
+            function confirmarEliminar(element) {
+                $.confirm({
+                    title: "Eliminar",
+                    content: "Está seguro de eliminar: " + "<br><br>" +
+                            "Placa: " + element.getAttribute('data-junta') +
+                                  "-" + element.getAttribute('data-activo') + "<br>" +
+                            "Descripción: " + element.getAttribute('data-descripcion') + "<br>" +
+                            "[Marca]: " + element.getAttribute('data-marca') + "<br>" +
+                            "[Modelo]: " + element.getAttribute('data-modelo') + "<br>" +
+                            "[Serie]: " + element.getAttribute('data-serie'),
+                    buttons: {
+                        eliminar: {
+                            text: "Eliminar",
+                            btnClass: "btn-danger",
+                            action: function () {
+                                location.replace("/activo/eliminar/" + element.getAttribute('data-junta') +
+                                        "/" + element.getAttribute('data-activo')
+                                        );
+                            }
+                        },
+                        cancelar: {
+                            text: "Cancelar"
+                        }
+                    }
+                });
+            };
         </script>
+
     </head>
 
     <body>
@@ -105,31 +137,43 @@
                                             <td>[[${objeto.asiento}]]</td>
                                             <td>[[${objeto.activoPK.numeroJunta}]]</td>
                                             <td>[[${objeto.activoPK.numeroActivo}]]</td>
-                                            <td>[[${objeto.idDescripcionActivo}]]</td>
+                                            <td th:if="${objeto.descripcionActivo != null}">[[${objeto.descripcionActivo.detalleDescripcionActivo}]]</td>
+                                            <td th:if="${objeto.descripcionActivo == null}"></td>
                                             <td>[[${objeto.marca}]]</td>
                                             <td>[[${objeto.modelo}]]</td>
                                             <td>[[${objeto.serie}]]</td>
-                                            
-                                            <td>[[${objeto.enReparacion}]]</td>
-                                            <td>[[${objeto.idEstadoActivo}]]</td>
-                                            <td>[[${objeto.idNumeroAula}]]</td>
-                                            <td>[[${objeto.idModoAdquisicion}]]</td>
-                                       
+
+                                            <td th:if="${objeto.enReparacion != false}">[[#{activo.reparando}]]</td>
+                                            <td th:if="${objeto.enReparacion == false}">-</td>
+                                            <td th:if="${objeto.estadoActivo != null}">[[${objeto.estadoActivo.detalleEstadoActivo}]]</td>
+                                            <td th:if="${objeto.estadoActivo == null}">-</td>
+                                            <td th:if="${objeto.numeroAula != null}">[[${objeto.numeroAula.detalleNumeroAula}]]</td>
+                                            <td th:if="${objeto.numeroAula == null}">-</td>
+                                            <td th:if="${objeto.modoAdquisicion != null}">[[${objeto.modoAdquisicion.detalleModoAdquisicion}]]</td>
+                                            <td th:if="${objeto.modoAdquisicion == null}">-</td>
                                             <td>
                                                 <a th:href="@{/activo/editar/} + ${objeto.activoPK.numeroJunta} + '/' +
-                                                                                 ${objeto.activoPK.numeroActivo}" 
+                                                   ${objeto.activoPK.numeroActivo}" 
                                                    class="btn btn-warning"><!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
                                                     <i class="fas fa-angle-double-right"></i> [[#{accion.editar}]]
                                                 </a>
                                             </td>
-                                            <td>
-                                                <a th:href="@{/activo/eliminar/} + ${objeto.activoPK.numeroJunta} + '/' +
-                                                                                   ${objeto.activoPK.numeroActivo}" 
-                                                   class="btn btn-danger"> <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
+                                            <td><!-- th:href='@{/activo/eliminar/} + ${objeto.activoPK.numeroJunta}'+ '/' + 
+                                                                                    '${objeto.activoPK.numeroActivo}') -->
+                                                <a th:if="${objeto.descripcionActivo != null}"
+                                                   th:data-junta="${objeto.activoPK.numeroJunta}"
+                                                   th:data-activo="${objeto.activoPK.numeroActivo}"
+                                                   th:data-descripcion="${objeto.descripcionActivo.detalleDescripcionActivo}"
+                                                   th:data-marca="${objeto.marca}"
+                                                   th:data-modelo="${objeto.modelo}"
+                                                   th:data-serie="${objeto.serie}"
+                                                   onclick="confirmarEliminar(this)"
+                                                   class ="btn btn-danger"> <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
                                                     <i class="fas fa-angle-double-right"></i> [[#{accion.eliminar}]]
                                                 </a>
+                                                
                                             </td>
-                                            
+
                                         </tr>
                                     </tbody>
                                 </table>

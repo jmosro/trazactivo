@@ -26,7 +26,7 @@
                                     </button>
                                 </div>
                                 <div class="col-md-4 text-md-start text-sm-start" th:if="${habilitareliminar == true}" >
-                                    <a th:href="@{/tipoanotacion/eliminar(idTipoAnotacion=${tipoanotacionobjeto.idTipoAnotacion})}"
+                                    <a th:href="@{/tipoanotacion/eliminar/} + ${tipoanotacionobjeto.idTipoAnotacion}"
                                        class="btn btn-danger btn-block">
                                         <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
                                     </a>

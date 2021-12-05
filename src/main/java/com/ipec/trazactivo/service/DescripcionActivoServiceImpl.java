@@ -33,8 +33,8 @@ public class DescripcionActivoServiceImpl implements DescripcionActivoServiceInt
 
     @Override
     @Transactional(readOnly = true)
-    public DescripcionActivo encontrarPorId(DescripcionActivo descripcionActivo) {
-        return descripcionActivoDao.findById(descripcionActivo.getIdDescripcionActivo()).orElse(null);
+    public DescripcionActivo encontrarPorId(Integer idDescripcionActivo) {
+        return descripcionActivoDao.findById(idDescripcionActivo).orElse(null);
     }
     
 }

@@ -7,5 +7,5 @@ public interface PersonaResponsableServiceInterface {
     public List<PersonaResponsable> listarTodo();
     public void guardar(PersonaResponsable personaResponsable);
     public void eliminar(PersonaResponsable personaResponsable);
-    public PersonaResponsable encontrarPorId(PersonaResponsable personaResponsable);
+    public PersonaResponsable encontrarPorId(Integer idPersonaResponsable);
 }

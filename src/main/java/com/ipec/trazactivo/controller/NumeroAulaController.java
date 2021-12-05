@@ -7,10 +7,13 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -31,14 +34,14 @@ public class NumeroAulaController {
     }
     
     @GetMapping("/agregar")
-    public String agregar(NumeroAula numeroAula, Model model) {
+    public String agregar(@ModelAttribute("numeroaulaobjeto") NumeroAula numeroAula, Model model) {
         model.addAttribute("numeroaulaobjeto", numeroAula);
         model.addAttribute("habilitareliminar", false);
         return "numeroaula/modificar";
     }
     
     @PostMapping("/guardar")
-    public String guardar(@Valid NumeroAula numeroAula, Errors errores, Model model) {
+    public String guardar(@Valid @ModelAttribute("numeroaulaobjeto") NumeroAula numeroAula, Errors errores, Model model) {
         if(errores.hasErrors()) {
             model.addAttribute("habilitareliminar", true);
             return "numeroaula/modificar";
@@ -48,16 +51,23 @@ public class NumeroAulaController {
     }
     
     @GetMapping("/editar/{idNumeroAula}")
-    public String editar(NumeroAula numeroAula, Model model) {
-        numeroAula = numeroAulaService.encontrarPorId(numeroAula);
+    public String editar(@ModelAttribute("numeroaulaobjeto") NumeroAula numeroAula, Model model) {
+        numeroAula = numeroAulaService.encontrarPorId(numeroAula.getIdNumeroAula());
         model.addAttribute("numeroaulaobjeto", numeroAula);
         model.addAttribute("habilitareliminar", true);
         return "numeroaula/modificar";
     }
     
-    @GetMapping("/eliminar")
-    public String eliminar(NumeroAula numeroAula) {
-        numeroAulaService.eliminar(numeroAula);
+    @GetMapping("/eliminar/{numeroEliminar}")
+    public String eliminar(@PathVariable Integer numeroEliminar, Model model) {
+        NumeroAula aulaObjeto = numeroAulaService.encontrarPorId(numeroEliminar);
+        try {
+            numeroAulaService.eliminar(aulaObjeto);
+        } catch (DataIntegrityViolationException ex) {
+            model.addAttribute("numeroaulaobjeto", aulaObjeto);
+            model.addAttribute("errorEliminar", true);
+            return "numeroaula/modificar";
+        }
         return "redirect:/numeroaula";
     }
 }

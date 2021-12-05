@@ -33,8 +33,8 @@ public class EstadoActivoServiceImpl implements EstadoActivoServiceInterface {
 
     @Override
     @Transactional(readOnly = true)
-    public EstadoActivo encontrarPorId(EstadoActivo estadoActivo) {
-        return estadoActivoDao.findById(estadoActivo.getIdEstadoActivo()).orElse(null);
+    public EstadoActivo encontrarPorId(Integer idEstadoActivo) {
+        return estadoActivoDao.findById(idEstadoActivo).orElse(null);
     }
     
 }

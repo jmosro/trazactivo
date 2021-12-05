@@ -33,8 +33,8 @@ public class ModoAdquisicionServiceImpl implements ModoAdquisicionServiceInterfa
 
     @Override
     @Transactional(readOnly = true)
-    public ModoAdquisicion encontrarPorId(ModoAdquisicion modoAdquisicion) {
-        return modoAdquisicionDao.findById(modoAdquisicion.getIdModoAdquisicion()).orElse(null);
+    public ModoAdquisicion encontrarPorId(Integer idModoAdquisicion) {
+        return modoAdquisicionDao.findById(idModoAdquisicion).orElse(null);
     }
     
 }

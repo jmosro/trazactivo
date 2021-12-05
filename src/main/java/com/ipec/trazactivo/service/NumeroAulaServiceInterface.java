@@ -7,5 +7,5 @@ public interface NumeroAulaServiceInterface {
     public List<NumeroAula> listarTodo();
     public void guardar(NumeroAula numeroAula);
     public void eliminar(NumeroAula numeroAula);
-    public NumeroAula encontrarPorId(NumeroAula numeroAula);
+    public NumeroAula encontrarPorId(Integer idNumeroAula);
 }

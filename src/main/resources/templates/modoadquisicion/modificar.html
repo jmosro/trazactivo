@@ -26,7 +26,7 @@
                                     </button>
                                 </div>
                                 <div class="col-md-4 text-md-start text-sm-start" th:if="${habilitareliminar == true}" >
-                                    <a th:href="@{/modoadquisicion/eliminar(idModoAdquisicion=${modoadquisicionobjeto.idModoAdquisicion})}"
+                                    <a th:href="@{/modoadquisicion/eliminar/} + ${modoadquisicionobjeto.idModoAdquisicion}"
                                        class="btn btn-danger btn-block">
                                         <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
                                     </a>
@@ -55,6 +55,7 @@
                                             <label class="mb-2" for="detalleModoAdquisicion">[[#{generico.detalle}]]</label>
                                             <input type="text" class="form-control" name="detalleModoAdquisicion" 
                                                    required="true" th:field="*{detalleModoAdquisicion}"/>
+                                            <span class="text-danger" th:if="${errorEliminar == true}">[[#{generico.DataIntegrityViolationException}]]</span>
                                         </div>                    
                                     </div>
                                 </div>

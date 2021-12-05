@@ -96,7 +96,7 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                <a th:href="@{/personaresponsable/eliminar(idPersonaResponsable=${objeto.idPersonaResponsable})}"
+                                                <a th:href="@{/personaresponsable/eliminar/} + ${objeto.idPersonaResponsable}"
                                                    class="btn btn-danger"> <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
                                                     <i class="fas fa-angle-double-right"></i> [[#{accion.eliminar}]]
                                                 </a>

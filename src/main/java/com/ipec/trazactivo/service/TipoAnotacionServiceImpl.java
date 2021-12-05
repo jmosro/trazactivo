@@ -33,8 +33,8 @@ public class TipoAnotacionServiceImpl implements TipoAnotacionServiceInterface {
 
     @Override
     @Transactional(readOnly = true)
-    public TipoAnotacion encontrarPorId(TipoAnotacion tipoAnotacion) {
-        return tipoAnotacionDao.findById(tipoAnotacion.getIdTipoAnotacion()).orElse(null);
+    public TipoAnotacion encontrarPorId(Integer idTipoAnotacion) {
+        return tipoAnotacionDao.findById(idTipoAnotacion).orElse(null);
     }
     
 }

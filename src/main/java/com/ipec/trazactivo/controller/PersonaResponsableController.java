@@ -7,10 +7,13 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -31,14 +34,14 @@ public class PersonaResponsableController {
     }
     
     @GetMapping("/agregar")
-    public String agregar(PersonaResponsable personaResponsable, Model model) {
+    public String agregar(@ModelAttribute("personaresponsableobjeto") PersonaResponsable personaResponsable, Model model) {
         model.addAttribute("personaresponsableobjeto", personaResponsable);
         model.addAttribute("habilitareliminar", false);
         return "personaresponsable/modificar";
     }
     
     @PostMapping("/guardar")
-    public String guardar(@Valid PersonaResponsable personaResponsable, Errors errores, Model model) {
+    public String guardar(@Valid @ModelAttribute("personaresponsableobjeto") PersonaResponsable personaResponsable, Errors errores, Model model) {
         if(errores.hasErrors()) {
             model.addAttribute("habilitareliminar", true);
             return "personaresponsable/modificar";
@@ -48,16 +51,23 @@ public class PersonaResponsableController {
     }
     
     @GetMapping("/editar/{idPersonaResponsable}")
-    public String editar(PersonaResponsable personaResponsable, Model model) {
-        personaResponsable = personaResponsableService.encontrarPorId(personaResponsable);
+    public String editar(@ModelAttribute("personaresponsableobjeto") PersonaResponsable personaResponsable, Model model) {
+        personaResponsable = personaResponsableService.encontrarPorId(personaResponsable.getIdPersonaResponsable());
         model.addAttribute("personaresponsableobjeto", personaResponsable);
         model.addAttribute("habilitareliminar", true);
         return "personaresponsable/modificar";
     }
     
-    @GetMapping("/eliminar")
-    public String eliminar(PersonaResponsable personaResponsable) {
-        personaResponsableService.eliminar(personaResponsable);
+    @GetMapping("/eliminar/{numeroEliminar}")
+    public String eliminar(@PathVariable Integer numeroEliminar, Model model) {
+        PersonaResponsable responsableObjeto = personaResponsableService.encontrarPorId(numeroEliminar);
+        try {
+            personaResponsableService.eliminar(responsableObjeto);
+        } catch (DataIntegrityViolationException ex) {
+            model.addAttribute("personaresponsableobjeto", responsableObjeto);
+            model.addAttribute("errorEliminar", true);
+            return "personaresponsable/modificar";
+        }
         return "redirect:/personaresponsable";
     }
 }

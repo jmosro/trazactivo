@@ -33,8 +33,8 @@ public class PersonaResponsableServiceImpl implements PersonaResponsableServiceI
 
     @Override
     @Transactional(readOnly = true)
-    public PersonaResponsable encontrarPorId(PersonaResponsable personaResponsable) {
-        return personaResponsableDao.findById(personaResponsable.getIdPersonaResponsable()).orElse(null);
+    public PersonaResponsable encontrarPorId(Integer idPersonaResponsable) {
+        return personaResponsableDao.findById(idPersonaResponsable).orElse(null);
     }
     
 }
