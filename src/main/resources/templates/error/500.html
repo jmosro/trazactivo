@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Error interno del servidor error 500</title>
+        <meta charset="UTF-8" />
+
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+        <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css}"/>
+        <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+        <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    </head>
+    <body>
+        <div class="p-5 mt-4 mb-4">
+            <div class="text-center">
+                <img src="/images/error-500.png" class="img-fluid" alt="Error 500" 
+                     style="width: 350px; "/>
+            </div>
+            <div class="text-center p-5">
+                <a th:href="@{/home}" >[[#{accion.ir-home}]]</a>
+            </div>
+            
+        </div>
+
+    </body>
+</html>
