@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/personaresponsable")
 public class PersonaResponsableController {
     
-    private final Logger logger = LoggerFactory.getLogger(DescripcionActivoController.class);
+    private final Logger logger = LoggerFactory.getLogger(PersonaResponsableController.class);
     
     @Autowired
     private PersonaResponsableServiceInterface personaResponsableService;

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/modoadquisicion")
 public class ModoAdquisicionController {
     
-    private final Logger logger = LoggerFactory.getLogger(DescripcionActivoController.class);
+    private final Logger logger = LoggerFactory.getLogger(ModoAdquisicionController.class);
     
     @Autowired
     private ModoAdquisicionServiceInterface modoAdquisicionService;

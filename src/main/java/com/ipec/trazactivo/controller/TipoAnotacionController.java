@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/tipoanotacion")
 public class TipoAnotacionController {
     
-    private final Logger logger = LoggerFactory.getLogger(DescripcionActivoController.class);
+    private final Logger logger = LoggerFactory.getLogger(TipoAnotacionController.class);
     
     @Autowired
     private TipoAnotacionServiceInterface tipoAnotacionService;

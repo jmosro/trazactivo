@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/estadoactivo")
 public class EstadoActivoController {
     
-    private final Logger logger = LoggerFactory.getLogger(DescripcionActivoController.class);
+    private final Logger logger = LoggerFactory.getLogger(EstadoActivoController.class);
     
     @Autowired
     private EstadoActivoServiceInterface estadoActivoService;

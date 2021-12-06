@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/numeroaula")
 public class NumeroAulaController {
     
-    private final Logger logger = LoggerFactory.getLogger(DescripcionActivoController.class);
+    private final Logger logger = LoggerFactory.getLogger(NumeroAulaController.class);
     
     @Autowired
     private NumeroAulaServiceInterface numeroAulaService;
