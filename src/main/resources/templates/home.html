@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:th="http://www.thymeleaf.org" 
+      class="h-100">
+    <head>
+        <title>Sistema de Control para Activos Plaqueados Trazactivo</title>
+        <meta charset="UTF-8" />
+
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+        <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css}"/>
+        <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+        <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    </head>
+
+    <body class="d-flex flex-column h-100">
+        <main class="flex-shrink-0">
+            <header th:replace="layout/plantilla :: header"></header>
+
+            <section>
+                <div class="container py-4">
+                    <div class="row">
+                        <div class="col-md-12 my-2">
+                            <div class="card">
+                                <div class="card-header text-center">
+                                    <h1>Sistema de Control para Activos Plaqueados Trazactivo</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 my-2">
+                            <div class="card bg-light">
+                                <div class="card-header mt-4 text-center">
+                                    <h5>Módulo Principal</h5>
+                                </div>
+                                <a th:href="@{/activo/}" class="btn btn-success py-4">
+                                    <i class="fa fa-rocket"></i><br />Listar Activos
+                                </a>
+                            </div>
+                        </div>
+                        <div class="my-4">
+                            <div class="card bg-light">
+                                <div class="card-header mt-4 text-center">
+                                    <h5>Módulos</h5>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 py-1">
+                                        <a th:href="@{/descripcionactivo/}" class="btn btn-primary"
+                                           style="width: 100%;">
+                                            <i class="fa fa-cog"></i><br />Descripciones sencillas
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4 py-1">
+                                        <a th:href="@{/estadoactivo/}" class="btn btn-primary"
+                                           style="width: 100%;">
+                                            <i class="fa fa-cog"></i><br />Condiciones físicas
+                                        </a>
+                                    </div>
+
+                                    <div class="col-md-4 py-1">
+                                        <a th:href="@{/modoadquisicion/}" class="btn btn-primary"
+                                           style="width: 100%;">
+                                            <i class="fa fa-cog"></i><br />Modos de adquisición
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4 py-1">
+                                        <a th:href="@{/numeroaula/}" class="btn btn-primary"
+                                           style="width: 100%;">
+                                            <i class="fa fa-cog"></i><br />Ubicaciones
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4 py-1">
+                                        <a th:href="@{/tipoanotacion/}" class="btn btn-primary"
+                                           style="width: 100%;">
+                                            <i class="fa fa-cog"></i><br />Tipos de anotación
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4 py-1">
+                                        <a th:href="@{/especialidadacademica/}" class="btn btn-primary"
+                                           style="width: 100%;">
+                                            <i class="fa fa-cog"></i><br />Tipos de especialidades académicas
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4 py-1">
+                                        <a th:href="@{/personaresponsable/}" class="btn btn-primary"
+                                           style="width: 100%;">
+                                            <i class="fa fa-cog"></i><br />Personas responsables
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer th:replace="layout/plantilla :: footer"></footer>
+    </body>
+</html>
