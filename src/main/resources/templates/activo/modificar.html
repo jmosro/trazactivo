@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" 
-      xmlns:th="http://www.thymeleaf.org" >
+      xmlns:th="http://www.thymeleaf.org" 
+      class="h-100">
     <head>
         <title>Lista de activos plaqueados</title>
         <meta charset="UTF-8"/>
@@ -19,12 +20,12 @@
             function confirmarEliminar(element) {
                 $.confirm({
                     title: "Eliminar",
-                    content: "Está seguro de eliminar: " + "<br><br>" +
+                    content: "Está seguro de eliminar: " + "<br/><br/>" +
                             "Placa: " + element.getAttribute('data-junta') +
-                            "-" + element.getAttribute('data-activo') + "<br>" +
-                            "Descripción: " + element.getAttribute('data-descripcion') + "<br>" +
-                            "[Marca]: " + element.getAttribute('data-marca') + "<br>" +
-                            "[Modelo]: " + element.getAttribute('data-modelo') + "<br>" +
+                            "-" + element.getAttribute('data-activo') + "<br/>" +
+                            "Descripción: " + element.getAttribute('data-descripcion') + "<br/>" +
+                            "[Marca]: " + element.getAttribute('data-marca') + "<br/>" +
+                            "[Modelo]: " + element.getAttribute('data-modelo') + "<br/>" +
                             "[Serie]: " + element.getAttribute('data-serie'),
                     buttons: {
                         eliminar: {
@@ -45,184 +46,185 @@
             ;
         </script>
     </head>
-    <body>
-        <header></header>
+    <body class="d-flex flex-column h-100">
+        <main class="flex-shrink-0">
+            <header th:replace="layout/plantilla :: header"></header>
 
-        <section>
-            <form th:action="@{/activo/guardar}" th:object="${activoobjeto}"
-                  method="POST" class="was-validated">
+            <section>
+                <form th:action="@{/activo/guardar}" th:object="${activoobjeto}"
+                      method="POST" class="was-validated">
 
-                <section>
-                    <div id="actions" class="py-4 mb-4 mt-4 bg-light">
+                    <section>
+                        <div id="actions" class="py-4 mb-4 mt-4 bg-light">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-4 text-md-start text-sm-start">
+                                        <a th:href="@{/activo}" class="btn btn-ligth btn-block">
+                                            <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4 text-md-center text-sm-start">
+                                        <button type="submit" class="btn btn-success btn-block">
+                                            <i class="fas fa-check"></i> [[#{accion.guardar}]]
+                                        </button>
+                                    </div>
+                                    <div class="col-md-4 text-md-start text-sm-start" th:if="${habilitareliminar == true}">
+                                        <a th:if="${activoobjeto.descripcionActivo != null}"
+                                           th:data-junta="${activoobjeto.activoPK.numeroJunta}"
+                                           th:data-activo="${activoobjeto.activoPK.numeroActivo}"
+                                           th:data-descripcion="${activoobjeto.descripcionActivo.detalleDescripcionActivo}"
+                                           th:data-marca="${activoobjeto.marca}"
+                                           th:data-modelo="${activoobjeto.modelo}"
+                                           th:data-serie="${activoobjeto.serie}"
+                                           class="btn btn-danger"
+                                           onclick="confirmarEliminar(this)" > <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
+                                            <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!--<div th:if="${#fields.hasAnyErrors()}">
+                        <ul>
+                            <li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+                        </ul>
+                    </div>-->
+
+                    <div id="details">
                         <div class="container">
                             <div class="row">
-                                <div class="col-md-4 text-md-start text-sm-start">
-                                    <a th:href="@{/activo}" class="btn btn-ligth btn-block">
-                                        <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
-                                    </a>
-                                </div>
-                                <div class="col-md-4 text-md-center text-sm-start">
-                                    <button type="submit" class="btn btn-success btn-block">
-                                        <i class="fas fa-check"></i> [[#{accion.guardar}]]
-                                    </button>
-                                </div>
-                                <div class="col-md-4 text-md-start text-sm-start" th:if="${habilitareliminar == true}">
-                                    <a th:if="${activoobjeto.descripcionActivo != null}"
-                                       th:data-junta="${activoobjeto.activoPK.numeroJunta}"
-                                       th:data-activo="${activoobjeto.activoPK.numeroActivo}"
-                                       th:data-descripcion="${activoobjeto.descripcionActivo.detalleDescripcionActivo}"
-                                       th:data-marca="${activoobjeto.marca}"
-                                       th:data-modelo="${activoobjeto.modelo}"
-                                       th:data-serie="${activoobjeto.serie}"
-                                       class="btn btn-danger"
-                                       onclick="confirmarEliminar(this)" > <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
-                                        <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
-                                    </a>
+                                <div class="col">
+                                    <div class="card mb-4">
+                                        <div class="card-header mt-4">
+                                            <h4>[[#{activo.editar}]]</h4>
+                                        </div>
+                                        <div class="card-body mb-4">
 
+                                            <!-- Placa -->
+                                            <div class="row">
+                                                <div class="form-group col-md-2">
+                                                    <label class="mb-2" for="activoPK.numeroJunta">[[#{activo.numero-junta}]]</label>
+                                                    <div th:if="${habilitareditarpkjunta == true}">
+                                                        <input type="number" class="form-control" name="activoPK.numeroJunta"
+                                                               th:field="*{activoPK.numeroJunta}" placeholder="4864" />
+                                                        <span class="text-danger" th:if="${#fields.hasErrors('activoPK.numeroJunta')}" th:errors="*{activoPK.numeroJunta}">Error Número Junta</span>
+                                                    </div>
+                                                    <div th:if="${habilitareditarpkjunta == false}">
+                                                        <input type="hidden" name="activoPK.numeroJunta" th:field="*{activoPK.numeroJunta}" />
+                                                        <input type="number" class="form-control" name="activoPK.numeroJuntaVisible" 
+                                                               th:field="*{activoPK.numeroJunta}" disabled="disabled" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label class="mb-2" for="activoPK.numeroActivo">[[#{activo.numero-activo}]]</label>
+                                                    <input type="hidden" name="activoPK.numeroActivo" th:field="*{activoPK.numeroActivo}" />
+                                                    <input type="number" class="form-control" name="activoPK.numeroActivoVisible"
+                                                           th:field="*{activoPK.numeroActivo}" disabled="disabled"/>
+                                                </div>
+                                                <div class="form-group mt-4 mb-4 col-md-2"></div>
+
+
+                                                <!-- Tomo/Folio/Asiento -->
+                                                <div class="form-group col-md-2">
+                                                    <label class="mb-2" for="tomo">[[#{activo.tomo}]]</label>
+                                                    <input type="number" class="form-control" name="tomo" 
+                                                           required="true" th:field="*{tomo}"/>
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label class="mb-2" for="folio">[[#{activo.folio}]]</label>
+                                                    <input type="number" class="form-control" name="folio" 
+                                                           required="true" th:field="*{folio}"/>
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label class="mb-2" for="asiento">[[#{activo.asiento}]]</label>
+                                                    <input type="number" class="form-control" name="asiento" 
+                                                           required="true" th:field="*{asiento}"/>
+                                                </div>
+                                            </div>
+
+
+                                            <!-- Descripción Activo -->
+                                            <div class="form-group mt-4 mb-4">
+                                                <label class="mb-2" for="detalleDescripcionActivo">[[#{activo.descripcion-activo}]]</label>
+                                                <select required="true" class="form-select" th:field="*{descripcionActivo.idDescripcionActivo}">
+                                                    <option th:each="descripcionactivoobjeto : ${descripcionactivolista}"
+                                                            th:value="${descripcionactivoobjeto.idDescripcionActivo}"
+                                                            th:text="${descripcionactivoobjeto.detalleDescripcionActivo}" 
+                                                            th:selected="${descripcionactivoobjeto.idDescripcionActivo==0}"></option>
+                                                </select>
+                                            </div>
+
+                                            <!-- Marca/Modelo/Serie -->
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label class="mb-2" for="marca">[[#{activo.marca}]]</label>
+                                                    <input type="text" class="form-control" th:name="marca"  th:id="marca"
+                                                           th:value="${activoobjeto.marca != null} ? ${activoobjeto.marca} : #{activo.no-indica}"/>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('marca')}" th:errors="*{marca}">Error Marca</span>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label class="mb-2" for="modelo">[[#{activo.modelo}]]</label>
+                                                    <input type="text" class="form-control" th:name="modelo"  th:id="modelo"
+                                                           th:value="${activoobjeto.modelo != null} ? ${activoobjeto.modelo} : #{activo.no-indica}"/>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('modelo')}" th:errors="*{modelo}">Error Modelo</span>
+                                                </div>
+                                                <div class="form-group col-md-12">
+                                                    <label class="mb-2 mt-md-2" for="serie">[[#{activo.serie}]]</label>
+                                                    <input type="text" class="form-control" th:name="serie"  th:id="serie" 
+                                                           th:value="${activoobjeto.serie != null} ? ${activoobjeto.serie} : #{activo.no-indica}"/>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('serie')}" th:errors="*{serie}">Error Serie</span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Otros Atributos -->
+                                            <div class="form-group mt-4 mb-4">
+                                                <label class="form-check-label" for="enReparacion">[[#{activo.en-reparacion}]]</label>
+                                                <input type="checkbox" class="form-check-input" name="enReparacion" 
+                                                       th:field="*{enReparacion}"/>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="input-group mb-2 col-md-12">
+                                                    <label class="input-group-text col-md-2" for="detalleEstadoActivo">[[#{activo.estado-activo}]]</label>
+                                                    <select required="true" class="form-select col-md-10" th:field="*{estadoActivo.idEstadoActivo}">
+                                                        <option th:each="estadoactivoobjeto : ${estadoactivolista}"
+                                                                th:value="${estadoactivoobjeto.idEstadoActivo}"
+                                                                th:text="${estadoactivoobjeto.detalleEstadoActivo}" 
+                                                                th:selected="${estadoactivoobjeto.idEstadoActivo==0}"></option>
+                                                    </select>
+                                                </div>
+                                                <div class="input-group mb-2 col-md-12">
+                                                    <label class="input-group-text col-md-2" for="detalleNumeroAula">[[#{activo.numero-aula}]]</label>
+                                                    <select required="true" class="form-select col-md-10" th:field="*{numeroAula.idNumeroAula}">
+                                                        <option th:each="numeroaulaobjeto : ${numeroaulalista}"
+                                                                th:value="${numeroaulaobjeto.idNumeroAula}"
+                                                                th:text="${numeroaulaobjeto.detalleNumeroAula}" 
+                                                                th:selected="${numeroaulaobjeto.idNumeroAula==0}"></option>
+                                                    </select>
+                                                </div>
+                                                <div class="input-group mb-2 col-md-12">
+                                                    <label class="input-group-text col-md-2" for="detalleModoAdquisicion">[[#{activo.modo-adquisicion}]]</label>
+                                                    <select required="true" class="form-select col-md-10" th:field="*{modoAdquisicion.idModoAdquisicion}">
+                                                        <option th:each="modoadquisicionobjeto : ${modoadquisicionlista}"
+                                                                th:value="${modoadquisicionobjeto.idModoAdquisicion}"
+                                                                th:text="${modoadquisicionobjeto.detalleModoAdquisicion}" 
+                                                                th:selected="${modoadquisicionobjeto.idModoAdquisicion==0}"></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </section>
-                <!--<div th:if="${#fields.hasAnyErrors()}">
-                    <ul>
-                        <li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
-                    </ul>
-                </div>-->
+                </form>
+            </section>
+        </main>
 
-                <div id="details">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col">
-                                <div class="card mb-4">
-                                    <div class="card-header mt-4">
-                                        <h4>[[#{activo.editar}]]</h4>
-                                    </div>
-                                    <div class="card-body mb-4">
-
-                                        <!-- Placa -->
-                                        <div class="row">
-                                            <div class="form-group col-md-2">
-                                                <label class="mb-2" for="activoPK.numeroJunta">[[#{activo.numero-junta}]]</label>
-                                                <div th:if="${habilitareditarpkjunta == true}">
-                                                    <input type="number" class="form-control" name="activoPK.numeroJunta"
-                                                           th:field="*{activoPK.numeroJunta}" placeholder="4864" />
-                                                    <span class="text-danger" th:if="${#fields.hasErrors('activoPK.numeroJunta')}" th:errors="*{activoPK.numeroJunta}">Error Número Junta</span>
-                                                </div>
-                                                <div th:if="${habilitareditarpkjunta == false}">
-                                                    <input type="hidden" name="activoPK.numeroJunta" th:field="*{activoPK.numeroJunta}" />
-                                                    <input type="number" class="form-control" name="activoPK.numeroJuntaVisible" 
-                                                           th:field="*{activoPK.numeroJunta}" disabled="disabled" />
-                                                </div>
-                                            </div>
-                                            <div class="form-group col-md-2">
-                                                <label class="mb-2" for="activoPK.numeroActivo">[[#{activo.numero-activo}]]</label>
-                                                <input type="hidden" name="activoPK.numeroActivo" th:field="*{activoPK.numeroActivo}" />
-                                                <input type="number" class="form-control" name="activoPK.numeroActivoVisible"
-                                                       th:field="*{activoPK.numeroActivo}" disabled="disabled"/>
-                                            </div>
-                                            <div class="form-group mt-4 mb-4 col-md-2"></div>
-
-
-                                            <!-- Tomo/Folio/Asiento -->
-                                            <div class="form-group col-md-2">
-                                                <label class="mb-2" for="tomo">[[#{activo.tomo}]]</label>
-                                                <input type="number" class="form-control" name="tomo" 
-                                                       required="true" th:field="*{tomo}"/>
-                                            </div>
-                                            <div class="form-group col-md-2">
-                                                <label class="mb-2" for="folio">[[#{activo.folio}]]</label>
-                                                <input type="number" class="form-control" name="folio" 
-                                                       required="true" th:field="*{folio}"/>
-                                            </div>
-                                            <div class="form-group col-md-2">
-                                                <label class="mb-2" for="asiento">[[#{activo.asiento}]]</label>
-                                                <input type="number" class="form-control" name="asiento" 
-                                                       required="true" th:field="*{asiento}"/>
-                                            </div>
-                                        </div>
-
-
-                                        <!-- Descripción Activo -->
-                                        <div class="form-group mt-4 mb-4">
-                                            <label class="mb-2" for="detalleDescripcionActivo">[[#{activo.descripcion-activo}]]</label>
-                                            <select required="true" class="form-select" th:field="*{descripcionActivo.idDescripcionActivo}">
-                                                <option th:each="descripcionactivoobjeto : ${descripcionactivolista}"
-                                                        th:value="${descripcionactivoobjeto.idDescripcionActivo}"
-                                                        th:text="${descripcionactivoobjeto.detalleDescripcionActivo}" 
-                                                        th:selected="${descripcionactivoobjeto.idDescripcionActivo==0}"></option>
-                                            </select>
-                                        </div>
-
-                                        <!-- Marca/Modelo/Serie -->
-                                        <div class="row">
-                                            <div class="form-group col-md-6">
-                                                <label class="mb-2" for="marca">[[#{activo.marca}]]</label>
-                                                <input type="text" class="form-control" th:name="marca"  th:id="marca"
-                                                       th:value="${activoobjeto.marca != null} ? ${activoobjeto.marca} : #{activo.no-indica}"/>
-                                                <span class="text-danger" th:if="${#fields.hasErrors('marca')}" th:errors="*{marca}">Error Marca</span>
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label class="mb-2" for="modelo">[[#{activo.modelo}]]</label>
-                                                <input type="text" class="form-control" th:name="modelo"  th:id="modelo"
-                                                       th:value="${activoobjeto.modelo != null} ? ${activoobjeto.modelo} : #{activo.no-indica}"/>
-                                                <span class="text-danger" th:if="${#fields.hasErrors('modelo')}" th:errors="*{modelo}">Error Modelo</span>
-                                            </div>
-                                            <div class="form-group col-md-12">
-                                                <label class="mb-2 mt-md-2" for="serie">[[#{activo.serie}]]</label>
-                                                <input type="text" class="form-control" th:name="serie"  th:id="serie" 
-                                                       th:value="${activoobjeto.serie != null} ? ${activoobjeto.serie} : #{activo.no-indica}"/>
-                                                <span class="text-danger" th:if="${#fields.hasErrors('serie')}" th:errors="*{serie}">Error Serie</span>
-                                            </div>
-                                        </div>
-
-                                        <!-- Otros Atributos -->
-                                        <div class="form-group mt-4 mb-4">
-                                            <label class="form-check-label" for="enReparacion">[[#{activo.en-reparacion}]]</label>
-                                            <input type="checkbox" class="form-check-input" name="enReparacion" 
-                                                   th:field="*{enReparacion}"/>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="input-group mb-2 col-md-12">
-                                                <label class="input-group-text col-md-2" for="detalleEstadoActivo">[[#{activo.estado-activo}]]</label>
-                                                <select required="true" class="form-select col-md-10" th:field="*{estadoActivo.idEstadoActivo}">
-                                                    <option th:each="estadoactivoobjeto : ${estadoactivolista}"
-                                                            th:value="${estadoactivoobjeto.idEstadoActivo}"
-                                                            th:text="${estadoactivoobjeto.detalleEstadoActivo}" 
-                                                            th:selected="${estadoactivoobjeto.idEstadoActivo==0}"></option>
-                                                </select>
-                                            </div>
-                                            <div class="input-group mb-2 col-md-12">
-                                                <label class="input-group-text col-md-2" for="detalleNumeroAula">[[#{activo.numero-aula}]]</label>
-                                                <select required="true" class="form-select col-md-10" th:field="*{numeroAula.idNumeroAula}">
-                                                    <option th:each="numeroaulaobjeto : ${numeroaulalista}"
-                                                            th:value="${numeroaulaobjeto.idNumeroAula}"
-                                                            th:text="${numeroaulaobjeto.detalleNumeroAula}" 
-                                                            th:selected="${numeroaulaobjeto.idNumeroAula==0}"></option>
-                                                </select>
-                                            </div>
-                                            <div class="input-group mb-2 col-md-12">
-                                                <label class="input-group-text col-md-2" for="detalleModoAdquisicion">[[#{activo.modo-adquisicion}]]</label>
-                                                <select required="true" class="form-select col-md-10" th:field="*{modoAdquisicion.idModoAdquisicion}">
-                                                    <option th:each="modoadquisicionobjeto : ${modoadquisicionlista}"
-                                                            th:value="${modoadquisicionobjeto.idModoAdquisicion}"
-                                                            th:text="${modoadquisicionobjeto.detalleModoAdquisicion}" 
-                                                            th:selected="${modoadquisicionobjeto.idModoAdquisicion==0}"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </section>
-
-
-        <footer></footer>        
+        <footer th:replace="layout/plantilla :: footer"></footer>
     </body>
 </html>

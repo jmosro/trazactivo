@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org" >
-    <head th:fragment="head">
+    <head>
         <title>Plantilla</title>
         <meta charset="UTF-8"/>
         <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
@@ -11,7 +11,56 @@
         <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
     </head>
     <body>
-        <header th:fragment="header"></header>
-        <footer th:fragment="footer" class="bg-warning text-white mt-5 p-5"></footer>
+        <header th:fragment="header">
+            <nav class="navbar navbar-dark bg-success navbar-expand-md">
+                <a th:href="@{/home}" class="navbar-brand ms-5">Trazactivo</a>
+                <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="navbar-collapse collapse" id="navbar">
+                    <ul class="navbar-nav ms-5">
+                        <li class="nav-item"><a class="nav-link" th:href="@{/home}">Inicio</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button"
+                               data-bs-toggle="dropdown">
+                                Módulo Principal
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark bg-success">
+                                <li><a class="dropdown-item" th:href="@{/activo/}">Listar Activos</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button"
+                               data-bs-toggle="dropdown">
+                                Módulos
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark bg-success">
+                                <li><a class="dropdown-item" th:href="@{/descripcionactivo/}">Descripciones sencillas</a></li>
+                                <li><a class="dropdown-item" th:href="@{/estadoactivo/}">Condiciones físicas</a></li>
+                                <li><a class="dropdown-item" th:href="@{/modoadquisicion/}">Modos de adquisición</a></li>
+                                <li><a class="dropdown-item" th:href="@{/numeroaula/}">Ubicaciones</a></li>
+                                <li><a class="dropdown-item" th:href="@{/tipoanotacion/}">Tipos de anotación</a></li>
+                                <li><a class="dropdown-item" th:href="@{/especialidadacademica/}">Tipos de especialidades académicas</a></li>
+                                <li><a class="dropdown-item" th:href="@{/personaresponsable/}">Personas responsables</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <footer th:fragment="footer" class="footer mt-auto">
+            <div class="container-fluid bg-success">
+                <div class="row">
+                    <div class="py-3">
+                        <p class="lead text-center text-white">
+                            <span class="fs-6">IPEC Santo Domingo de Heredia.</span><br/>
+                            <span class="fs-6">Proyecto de Código Abierto. Diciembre 2021.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
     </body>
 </html>

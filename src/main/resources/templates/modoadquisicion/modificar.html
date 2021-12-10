@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" 
-      xmlns:th="http://www.thymeleaf.org" >
+      xmlns:th="http://www.thymeleaf.org" 
+      class="h-100">
     <head>
         <title>Modo de adquisición de activos plaqueados</title>
         <meta charset="UTF-8"/>
@@ -19,8 +20,8 @@
             function confirmarEliminar(element) {
                 $.confirm({
                     title: "Eliminar",
-                    content: "Está seguro de eliminar: " + "<br><br>" +
-                            "Id: " + element.getAttribute('data-id') + "<br>" +
+                    content: "Está seguro de eliminar: " + "<br/><br/>" +
+                            "Id: " + element.getAttribute('data-id') + "<br/>" +
                             "Descripción: " + element.getAttribute('data-descripcion'),
                     buttons: {
                         eliminar: {
@@ -39,71 +40,73 @@
             ;
         </script>
     </head>
-    <body>
-        <header></header>
 
-        <section>
-            <form th:action="@{/modoadquisicion/guardar}" th:object="${modoadquisicionobjeto}"
-                  method="POST" class="was-validated">
+    <body class="d-flex flex-column h-100">
+        <main class="flex-shrink-0">
+            <header th:replace="layout/plantilla :: header"></header>
 
-                <section>
-                    <div id="actions" class="py-4 mb-4 mt-4 bg-light">
+            <section class="mb-5">
+                <form th:action="@{/modoadquisicion/guardar}" th:object="${modoadquisicionobjeto}"
+                      method="POST" class="was-validated">
+
+                    <section>
+                        <div id="actions" class="py-4 mb-4 mt-4 bg-light">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-4 text-md-start text-sm-start">
+                                        <a th:href="@{/modoadquisicion}" class="btn btn-ligth btn-block">
+                                            <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4 text-md-center text-sm-start">
+                                        <button type="submit" class="btn btn-success btn-block">
+                                            <i class="fas fa-check"></i> [[#{accion.guardar}]]
+                                        </button>
+                                    </div>
+                                    <div class="col-md-4 text-md-start text-sm-start" th:if="${habilitareliminar == true}" >
+                                        <a th:data-id="${modoadquisicionobjeto.idModoAdquisicion}"
+                                           th:data-descripcion="${modoadquisicionobjeto.detalleModoAdquisicion}"
+                                           class="btn btn-danger"
+                                           onclick="confirmarEliminar(this)" > <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
+                                            <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div id="details">
                         <div class="container">
                             <div class="row">
-                                <div class="col-md-4 text-md-start text-sm-start">
-                                    <a th:href="@{/modoadquisicion}" class="btn btn-ligth btn-block">
-                                        <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
-                                    </a>
-                                </div>
-                                <div class="col-md-4 text-md-center text-sm-start">
-                                    <button type="submit" class="btn btn-success btn-block">
-                                        <i class="fas fa-check"></i> [[#{accion.guardar}]]
-                                    </button>
-                                </div>
-                                <div class="col-md-4 text-md-start text-sm-start" th:if="${habilitareliminar == true}" >
-                                    <a th:data-id="${modoadquisicionobjeto.idModoAdquisicion}"
-                                       th:data-descripcion="${modoadquisicionobjeto.detalleModoAdquisicion}"
-                                       class="btn btn-danger"
-                                       onclick="confirmarEliminar(this)" > <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
-                                        <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <div id="details">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col">
-                                <div class="card">
-                                    <div class="card-header mt-4">
-                                        <h4>[[#{modoAdquisicion.editar}]]</h4>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="form-group mt-4 mb-4">
-                                            <label class="mb-2" for="idModoAdquisicion">[[#{generico.id}]]</label>
-                                            <input type="hidden" name="idModoAdquisicion" th:field="*{idModoAdquisicion}" />
-                                            <input type="number" class="form-control" name="idModoAdquisicionVisible"
-                                                   th:field="*{idModoAdquisicion}" disabled="disabled"/>
+                                <div class="col">
+                                    <div class="card">
+                                        <div class="card-header mt-4">
+                                            <h4>[[#{modoAdquisicion.editar}]]</h4>
                                         </div>
-                                        <div class="form-group mt-4 mb-4">
-                                            <label class="mb-2" for="detalleModoAdquisicion">[[#{generico.detalle}]]</label>
-                                            <input type="text" class="form-control" name="detalleModoAdquisicion" 
-                                                   required="true" th:field="*{detalleModoAdquisicion}"/>
-                                            <span class="text-danger" th:if="${errorEliminar == true}">[[#{generico.DataIntegrityViolationException}]]</span>
-                                        </div>                    
+                                        <div class="card-body">
+                                            <div class="form-group mt-4 mb-4">
+                                                <label class="mb-2" for="idModoAdquisicion">[[#{generico.id}]]</label>
+                                                <input type="hidden" name="idModoAdquisicion" th:field="*{idModoAdquisicion}" />
+                                                <input type="number" class="form-control" name="idModoAdquisicionVisible"
+                                                       th:field="*{idModoAdquisicion}" disabled="disabled"/>
+                                            </div>
+                                            <div class="form-group mt-4 mb-4">
+                                                <label class="mb-2" for="detalleModoAdquisicion">[[#{generico.detalle}]]</label>
+                                                <input type="text" class="form-control" name="detalleModoAdquisicion" 
+                                                       required="true" th:field="*{detalleModoAdquisicion}"/>
+                                                <span class="text-danger" th:if="${errorEliminar == true}">[[#{generico.DataIntegrityViolationException}]]</span>
+                                            </div>                    
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </form>
-        </section>
+                </form>
+            </section>
+        </main>
 
-
-        <footer></footer>        
+        <footer th:replace="layout/plantilla :: footer"></footer>      
     </body>
 </html>

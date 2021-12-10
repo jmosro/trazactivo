@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" 
-      xmlns:th="http://www.thymeleaf.org" >
+      xmlns:th="http://www.thymeleaf.org" 
+      class="h-100">
     <head>
         <title>Especialidades académicas donde se ubican los activos plaqueados</title>
         <meta charset="UTF-8"/>
@@ -35,7 +36,7 @@
                             "rt" +
                             "<'row'<'col-md-6'i><'col-md-6'p>>",
                     buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
-                    lengthMenu: [10, 25, 50, "All"]
+                    scrollX: false
                 });
             });
             /*
@@ -74,75 +75,77 @@
         </script>
     </head>
 
-    <body>
-        <header th:replace="layout/plantilla :: header"></header>
+    <body class="d-flex flex-column h-100">
+        <main class="flex-shrink-0">
+            <header th:replace="layout/plantilla :: header"></header>
 
 
-        <section class="py-4 mb-4 bg-light">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12"> <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
-                        <a th:href="@{/especialidadacademica/agregar}" class="btn btn-primary btn-block" 
-                           data-toggle="modal" data-target="#agregarNuevo">
-                            <i class="fas fa-plus"></i> [[#{accion.agregar}]]
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header mt-4">
-                                <h4>[[#{especialidadAcademica.titulo-lista}]]</h4>
-                            </div>
-                            <div th:if="${especialidadacademicatodo != null and !especialidadacademicatodo.empty}">
-                                <table id="miTabla" class="table table-stryped">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th>#</th>
-                                            <th th:text="#{generico.id}">Id</th>
-                                            <th th:text="#{generico.detalle}">Detalle</th>
-                                            <th></th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr th:each="objeto, contador : ${especialidadacademicatodo}">
-                                            <td>[[${contador.count}]]</td>
-                                            <td>[[${objeto.idEspecialidadAcademica}]]</td>
-                                            <td>[[${objeto.detalleEspecialidadAcademica}]]</td>
-                                            <td>
-                                                <a th:href="@{/especialidadacademica/editar/} + ${objeto.idEspecialidadAcademica}"
-                                                   class="btn btn-warning"><!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
-                                                    <i class="fas fa-angle-double-right"></i> [[#{accion.editar}]]
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <a th:data-id="${objeto.idEspecialidadAcademica}"
-                                                   th:data-descripcion="${objeto.detalleEspecialidadAcademica}"
-                                                   class="btn btn-danger"
-                                                   onclick="confirmarEliminar(this)" > <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
-                                                    <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="text-center p-2" th:if="${especialidadacademicatodo == null or especialidadacademicatodo.empty}">
-                                <span th:text="#{especialidadAcademica.lista-vacia}">Lista vacía</span>
-                            </div>
+            <section class="py-5 bg-light">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12"> <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
+                            <a th:href="@{/especialidadacademica/agregar}" class="btn btn-primary btn-block" 
+                               data-toggle="modal" data-target="#agregarNuevo">
+                                <i class="fas fa-plus"></i> [[#{accion.agregar}]]
+                            </a>
                         </div>
                     </div>
-
-
                 </div>
-            </div>
-        </section>
+            </section>
+
+            <section class="pb-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header mt-4">
+                                    <h4>[[#{especialidadAcademica.titulo-lista}]]</h4>
+                                </div>
+                                <div th:if="${especialidadacademicatodo != null and !especialidadacademicatodo.empty}">
+                                    <table id="miTabla" class="table table-stryped">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>#</th>
+                                                <th th:text="#{generico.id}">Id</th>
+                                                <th th:text="#{generico.detalle}">Detalle</th>
+                                                <th></th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="objeto, contador : ${especialidadacademicatodo}">
+                                                <td>[[${contador.count}]]</td>
+                                                <td>[[${objeto.idEspecialidadAcademica}]]</td>
+                                                <td>[[${objeto.detalleEspecialidadAcademica}]]</td>
+                                                <td>
+                                                    <a th:href="@{/especialidadacademica/editar/} + ${objeto.idEspecialidadAcademica}"
+                                                       class="btn btn-warning"><!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
+                                                        <i class="fas fa-angle-double-right"></i> [[#{accion.editar}]]
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a th:data-id="${objeto.idEspecialidadAcademica}"
+                                                       th:data-descripcion="${objeto.detalleEspecialidadAcademica}"
+                                                       class="btn btn-danger"
+                                                       onclick="confirmarEliminar(this)" > <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
+                                                        <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="text-center p-2" th:if="${especialidadacademicatodo == null or especialidadacademicatodo.empty}">
+                                    <span th:text="#{especialidadAcademica.lista-vacia}">Lista vacía</span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </section>
+        </main>
 
         <footer th:replace="layout/plantilla :: footer"></footer>
     </body>

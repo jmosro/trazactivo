@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" 
-      xmlns:th="http://www.thymeleaf.org" >
+      xmlns:th="http://www.thymeleaf.org"
+      class="h-100">
     <head>
         <title>Lista de activos plaqueados</title>
         <meta charset="UTF-8"/>
@@ -36,7 +37,6 @@
                             "<'row'<'col-md-6'i><'col-md-6'p>>",
                     buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
                     scrollX: true
-
                 });
             });
             /*
@@ -82,114 +82,116 @@
 
     </head>
 
-    <body>
-        <header th:replace="layout/plantilla :: header"></header>
+    <body class="d-flex flex-column h-100">
+        <main class="flex-shrink-0">
+            <header th:replace="layout/plantilla :: header"></header>
 
 
-        <section class="py-4 mb-4 bg-light">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12"> <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
-                        <a th:href="@{/activo/agregar}" class="btn btn-primary btn-block" 
-                           data-toggle="modal" data-target="#agregarNuevo">
-                            <i class="fas fa-plus"></i> [[#{accion.agregar}]]
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header mt-4">
-                                <h4>[[#{activo.titulo-lista}]]</h4>
-                            </div>
-                            <div th:if="${activotodo != null and !activotodo.empty}">
-                                <table id="miTabla" class="table table-stryped">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th>#</th>
-                                            <!-- Activo Atributos Obligatorios -->
-                                            <th th:text="#{activo.tomo}"></th>
-                                            <th th:text="#{activo.folio}"></th>
-                                            <th th:text="#{activo.asiento}"></th>
-                                            <th th:text="#{activo.numero-junta}"></th>
-                                            <th th:text="#{activo.numero-activo}"></th>
-                                            <th th:text="#{activo.descripcion-activo}"></th>
-                                            <th th:text="#{activo.marca}"></th>
-                                            <th th:text="#{activo.modelo}"></th>
-                                            <th th:text="#{activo.serie}"></th>
-                                            <!-- Activo Otros Atributos -->
-                                            <th th:text="#{activo.en-reparacion}"></th>
-                                            <th th:text="#{activo.estado-activo}"></th>
-                                            <th th:text="#{activo.numero-aula}"></th>
-                                            <th th:text="#{activo.modo-adquisicion}"></th>
-                                            <th th:text="#{accion.editar}"></th>
-                                            <th th:text="#{accion.eliminar}"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr th:each="objeto, contador : ${activotodo}">
-                                            <td>[[${contador.count}]]</td>
-                                            <td>[[${objeto.tomo}]]</td>
-                                            <td>[[${objeto.folio}]]</td>
-                                            <td>[[${objeto.asiento}]]</td>
-                                            <td>[[${objeto.activoPK.numeroJunta}]]</td>
-                                            <td>[[${objeto.activoPK.numeroActivo}]]</td>
-                                            <td th:if="${objeto.descripcionActivo != null}">[[${objeto.descripcionActivo.detalleDescripcionActivo}]]</td>
-                                            <td th:if="${objeto.descripcionActivo == null}"></td>
-                                            <td>[[${objeto.marca}]]</td>
-                                            <td>[[${objeto.modelo}]]</td>
-                                            <td>[[${objeto.serie}]]</td>
-
-                                            <td th:if="${objeto.enReparacion != false}">[[#{activo.reparando}]]</td>
-                                            <td th:if="${objeto.enReparacion == false}">-</td>
-                                            <td th:if="${objeto.estadoActivo != null}">[[${objeto.estadoActivo.detalleEstadoActivo}]]</td>
-                                            <td th:if="${objeto.estadoActivo == null}">-</td>
-                                            <td th:if="${objeto.numeroAula != null}">[[${objeto.numeroAula.detalleNumeroAula}]]</td>
-                                            <td th:if="${objeto.numeroAula == null}">-</td>
-                                            <td th:if="${objeto.modoAdquisicion != null}">[[${objeto.modoAdquisicion.detalleModoAdquisicion}]]</td>
-                                            <td th:if="${objeto.modoAdquisicion == null}">-</td>
-                                            <td>
-                                                <a th:href="@{/activo/editar/} + ${objeto.activoPK.numeroJunta} + '/' +
-                                                   ${objeto.activoPK.numeroActivo}" 
-                                                   class="btn btn-warning"><!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
-                                                    <i class="fas fa-angle-double-right"></i> [[#{accion.editar}]]
-                                                </a>
-                                            </td>
-                                            <td><!-- th:href='@{/activo/eliminar/} + ${objeto.activoPK.numeroJunta}'+ '/' + 
-                                                                                    '${objeto.activoPK.numeroActivo}') -->
-                                                <a th:if="${objeto.descripcionActivo != null}"
-                                                   th:data-junta="${objeto.activoPK.numeroJunta}"
-                                                   th:data-activo="${objeto.activoPK.numeroActivo}"
-                                                   th:data-descripcion="${objeto.descripcionActivo.detalleDescripcionActivo}"
-                                                   th:data-marca="${objeto.marca}"
-                                                   th:data-modelo="${objeto.modelo}"
-                                                   th:data-serie="${objeto.serie}"
-                                                   class ="btn btn-danger"
-                                                   onclick="confirmarEliminar(this)"> <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
-                                                    <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
-                                                </a>
-
-                                            </td>
-
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="text-center p-2" th:if="${activotodo == null or activotodo.empty}">
-                                <span th:text="#{activo.lista-vacia}">Lista vacía</span>
-                            </div>
+            <section class="py-5 bg-light">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12"> <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
+                            <a th:href="@{/activo/agregar}" class="btn btn-primary btn-block" 
+                               data-toggle="modal" data-target="#agregarNuevo">
+                                <i class="fas fa-plus"></i> [[#{accion.agregar}]]
+                            </a>
                         </div>
                     </div>
-
-
                 </div>
-            </div>
-        </section>
+            </section>
+
+            <section class="pb-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header mt-4">
+                                    <h4>[[#{activo.titulo-lista}]]</h4>
+                                </div>
+                                <div th:if="${activotodo != null and !activotodo.empty}">
+                                    <table id="miTabla" class="table table-stryped">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>#</th>
+                                                <!-- Activo Atributos Obligatorios -->
+                                                <th th:text="#{activo.tomo}"></th>
+                                                <th th:text="#{activo.folio}"></th>
+                                                <th th:text="#{activo.asiento}"></th>
+                                                <th th:text="#{activo.numero-junta}"></th>
+                                                <th th:text="#{activo.numero-activo}"></th>
+                                                <th th:text="#{activo.descripcion-activo}"></th>
+                                                <th th:text="#{activo.marca}"></th>
+                                                <th th:text="#{activo.modelo}"></th>
+                                                <th th:text="#{activo.serie}"></th>
+                                                <!-- Activo Otros Atributos -->
+                                                <th th:text="#{activo.en-reparacion}"></th>
+                                                <th th:text="#{activo.estado-activo}"></th>
+                                                <th th:text="#{activo.numero-aula}"></th>
+                                                <th th:text="#{activo.modo-adquisicion}"></th>
+                                                <th th:text="#{accion.editar}"></th>
+                                                <th th:text="#{accion.eliminar}"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="objeto, contador : ${activotodo}">
+                                                <td>[[${contador.count}]]</td>
+                                                <td>[[${objeto.tomo}]]</td>
+                                                <td>[[${objeto.folio}]]</td>
+                                                <td>[[${objeto.asiento}]]</td>
+                                                <td>[[${objeto.activoPK.numeroJunta}]]</td>
+                                                <td>[[${objeto.activoPK.numeroActivo}]]</td>
+                                                <td th:if="${objeto.descripcionActivo != null}">[[${objeto.descripcionActivo.detalleDescripcionActivo}]]</td>
+                                                <td th:if="${objeto.descripcionActivo == null}"></td>
+                                                <td>[[${objeto.marca}]]</td>
+                                                <td>[[${objeto.modelo}]]</td>
+                                                <td>[[${objeto.serie}]]</td>
+
+                                                <td th:if="${objeto.enReparacion != false}">[[#{activo.reparando}]]</td>
+                                                <td th:if="${objeto.enReparacion == false}">-</td>
+                                                <td th:if="${objeto.estadoActivo != null}">[[${objeto.estadoActivo.detalleEstadoActivo}]]</td>
+                                                <td th:if="${objeto.estadoActivo == null}">-</td>
+                                                <td th:if="${objeto.numeroAula != null}">[[${objeto.numeroAula.detalleNumeroAula}]]</td>
+                                                <td th:if="${objeto.numeroAula == null}">-</td>
+                                                <td th:if="${objeto.modoAdquisicion != null}">[[${objeto.modoAdquisicion.detalleModoAdquisicion}]]</td>
+                                                <td th:if="${objeto.modoAdquisicion == null}">-</td>
+                                                <td>
+                                                    <a th:href="@{/activo/editar/} + ${objeto.activoPK.numeroJunta} + '/' +
+                                                       ${objeto.activoPK.numeroActivo}" 
+                                                       class="btn btn-warning"><!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
+                                                        <i class="fas fa-angle-double-right"></i> [[#{accion.editar}]]
+                                                    </a>
+                                                </td>
+                                                <td><!-- th:href='@{/activo/eliminar/} + ${objeto.activoPK.numeroJunta}'+ '/' + 
+                                                                                        '${objeto.activoPK.numeroActivo}') -->
+                                                    <a th:if="${objeto.descripcionActivo != null}"
+                                                       th:data-junta="${objeto.activoPK.numeroJunta}"
+                                                       th:data-activo="${objeto.activoPK.numeroActivo}"
+                                                       th:data-descripcion="${objeto.descripcionActivo.detalleDescripcionActivo}"
+                                                       th:data-marca="${objeto.marca}"
+                                                       th:data-modelo="${objeto.modelo}"
+                                                       th:data-serie="${objeto.serie}"
+                                                       class ="btn btn-danger"
+                                                       onclick="confirmarEliminar(this)"> <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
+                                                        <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                                                    </a>
+
+                                                </td>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="text-center p-2" th:if="${activotodo == null or activotodo.empty}">
+                                    <span th:text="#{activo.lista-vacia}">Lista vacía</span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </section>
+        </main>
 
         <footer th:replace="layout/plantilla :: footer"></footer>
     </body>
