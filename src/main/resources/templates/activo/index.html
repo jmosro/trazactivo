@@ -88,7 +88,7 @@
 
 
             <section class="py-5 bg-light">
-                <div class="container">
+                <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-12"> <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
                             <a th:href="@{/activo/agregar}" class="btn btn-primary btn-block" 
@@ -101,7 +101,7 @@
             </section>
 
             <section class="pb-5">
-                <div class="container">
+                <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
@@ -128,6 +128,7 @@
                                                 <th th:text="#{activo.estado-activo}"></th>
                                                 <th th:text="#{activo.numero-aula}"></th>
                                                 <th th:text="#{activo.modo-adquisicion}"></th>
+                                                <th th:text="#{activo.observaciones}"></th>
                                                 <th th:text="#{accion.editar}"></th>
                                                 <th th:text="#{accion.eliminar}"></th>
                                             </tr>
@@ -141,7 +142,7 @@
                                                 <td>[[${objeto.activoPK.numeroJunta}]]</td>
                                                 <td>[[${objeto.activoPK.numeroActivo}]]</td>
                                                 <td th:if="${objeto.descripcionActivo != null}">[[${objeto.descripcionActivo.detalleDescripcionActivo}]]</td>
-                                                <td th:if="${objeto.descripcionActivo == null}"></td>
+                                                <td th:if="${objeto.descripcionActivo == null}">-</td>
                                                 <td>[[${objeto.marca}]]</td>
                                                 <td>[[${objeto.modelo}]]</td>
                                                 <td>[[${objeto.serie}]]</td>
@@ -154,6 +155,13 @@
                                                 <td th:if="${objeto.numeroAula == null}">-</td>
                                                 <td th:if="${objeto.modoAdquisicion != null}">[[${objeto.modoAdquisicion.detalleModoAdquisicion}]]</td>
                                                 <td th:if="${objeto.modoAdquisicion == null}">-</td>
+
+                                                <!-- Observaciones -->
+                                                <td th:if="${objeto.activoObservaciones.empty}">-</td>
+                                                <td th:if="${!objeto.activoObservaciones.empty}"><!-- Tiene datos -->
+                                                    <span th:each="observacionesObjeto, contador : ${objeto.activoObservaciones}">Ver: <a th:href="@{/activoobservacion/editar/} + ${observacionesObjeto.idActivoObservacion}">[[${observacionesObjeto.tomo}]]/[[${observacionesObjeto.folio}]]/[[${observacionesObjeto.asiento}]]</a>, </span>
+                                                </td>
+
                                                 <td>
                                                     <a th:href="@{/activo/editar/} + ${objeto.activoPK.numeroJunta} + '/' +
                                                        ${objeto.activoPK.numeroActivo}" 

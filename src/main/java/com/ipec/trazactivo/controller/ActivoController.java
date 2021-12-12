@@ -1,7 +1,9 @@
 package com.ipec.trazactivo.controller;
 
 import com.ipec.trazactivo.model.Activo;
+import com.ipec.trazactivo.model.ActivoObservacion;
 import com.ipec.trazactivo.model.ActivoPK;
+import com.ipec.trazactivo.service.ActivoObservacionServiceInterface;
 import com.ipec.trazactivo.service.ActivoServiceInterface;
 import com.ipec.trazactivo.service.DescripcionActivoServiceInterface;
 import com.ipec.trazactivo.service.EstadoActivoServiceInterface;
@@ -37,12 +39,13 @@ public class ActivoController {
     private NumeroAulaServiceInterface numeoAulaService;
     @Autowired
     private ModoAdquisicionServiceInterface modoAdquisicionService;
-
+    @Autowired
+    private ActivoObservacionServiceInterface activoObservacionService;
+    
     @GetMapping("")
     public String inicio(Model model) {
         List<Activo> activoTodo = activoService.listarTodo();
         model.addAttribute("activotodo", activoTodo);
-        logger.info("Información");
         return "activo/index";
     }
 
@@ -51,6 +54,7 @@ public class ActivoController {
         model.addAttribute("activoobjeto", activo);
         model.addAttribute("habilitareliminar", false);
         model.addAttribute("habilitareditarpkjunta", true);
+        model.addAttribute("habilitareditaranotaciones", false);
         var descripcionActivo = descripcionActivoService.listarTodo();
         model.addAttribute("descripcionactivolista", descripcionActivo);
         var estadoActivo = estadoActivoService.listarTodo();
@@ -109,6 +113,23 @@ public class ActivoController {
         model.addAttribute("numeroaulalista", numeroAula);
         var modoAdquisicion = modoAdquisicionService.listarTodo();
         model.addAttribute("modoadquisicionlista", modoAdquisicion);
+        
+        /*List<ActivoObservacion> prueba = activoObservacionService.encontrarPorNumeroActivo(activo.getActivoPK());
+        logger.info("Valores de prueba inicio");
+        for (ActivoObservacion valor : prueba) {
+            logger.info(valor.getTomo() + "/" + valor.getFolio() + "/" + valor.getAsiento());
+        }
+        logger.info("Valores de prueba fin");
+        */
+        
+        /*List<ActivoObservacion> prueba = activo.getActivoObservaciones();
+        logger.info("Valores de prueba inicio");
+        for (ActivoObservacion valor: prueba) {
+            logger.info(valor.getTomo() + "/" + valor.getFolio() + "/" + valor.getAsiento());
+        }
+        logger.info("Valores de prueba fin");
+        */
+        
         return "activo/modificar";
     }
 

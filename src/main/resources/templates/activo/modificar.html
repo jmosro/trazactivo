@@ -16,8 +16,32 @@
         <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 
+
+        <!-- Datatables dependencias
+         https://datatables.net/download/index
+         Step 1. Choose a styling framework: Bootstrap 5
+         Step 2. Select packages: DataTables
+         Extensions: Buttons[Column, HTML5 export[JSZip, pdfmake],
+         Print view], Responsive, Scroller
+        -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.11.3/b-2.0.1/b-colvis-2.0.1/b-html5-2.0.1/b-print-2.0.1/r-2.2.9/sc-2.0.5/datatables.min.css"/>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.11.3/b-2.0.1/b-colvis-2.0.1/b-html5-2.0.1/b-print-2.0.1/r-2.2.9/sc-2.0.5/datatables.min.js"></script>
+
+
         <script>
-            function confirmarEliminar(element) {
+            $(document).ready(function () {
+                $('#miTabla').DataTable({
+                    dom: "<'row'<'col-md-12 mb-2 mt-2'B>>" +
+                            "<'row'<'col-md-6'l><'col-md-6'f>>" +
+                            "rt" +
+                            "<'row'<'col-md-6'i><'col-md-6'p>>",
+                    buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+                    scrollX: true
+                });
+            });
+            function confirmarEliminarActivo(element) {
                 $.confirm({
                     title: "Eliminar",
                     content: "Está seguro de eliminar: " + "<br/><br/>" +
@@ -43,6 +67,30 @@
                     }
                 });
             }
+            function confirmarEliminarObservacion(element) {
+                $.confirm({
+                    title: "Eliminar",
+                    content: "Está seguro de eliminar: " + "<br/><br/>" +
+                            "Id: " + element.getAttribute('data-id') + "<br/>" +
+                            "Placa: " + element.getAttribute('data-numerojunta') + "/" + element.getAttribute('data-numeroactivo') + "<br/>" +
+                            "Anotación: Ver " + element.getAttribute('data-tomo') + "/" + element.getAttribute('data-folio') +
+                            "/" + element.getAttribute('data-asiento') + "<br/>" +
+                            "Tipo anotación: " + element.getAttribute('data-tipoanotacion') + "<br/>" +
+                            "Otro detalle: " + element.getAttribute('data-otrodetalle') + "<br/>",
+                    buttons: {
+                        eliminar: {
+                            text: "Eliminar",
+                            btnClass: "btn-danger",
+                            action: function () {
+                                location.replace("/activoobservacion/eliminar/" + element.getAttribute('data-id'));
+                            }
+                        },
+                        cancelar: {
+                            text: "Cancelar"
+                        }
+                    }
+                });
+            }
             ;
         </script>
     </head>
@@ -55,7 +103,7 @@
                       method="POST" class="was-validated">
 
                     <section>
-                        <div id="actions" class="py-4 mb-4 mt-4 bg-light">
+                        <div id="actions" class="py-5 bg-light">
                             <div class="container">
                                 <div class="row">
                                     <div class="col-md-4 text-md-start text-sm-start">
@@ -77,7 +125,7 @@
                                            th:data-modelo="${activoobjeto.modelo}"
                                            th:data-serie="${activoobjeto.serie}"
                                            class="btn btn-danger"
-                                           onclick="confirmarEliminar(this)" > <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
+                                           onclick="confirmarEliminarActivo(this)" > <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
                                             <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
                                         </a>
 
@@ -92,130 +140,205 @@
                         </ul>
                     </div>-->
 
-                    <div id="details">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col">
-                                    <div class="card mb-4">
-                                        <div class="card-header mt-4">
-                                            <h4>[[#{activo.editar}]]</h4>
-                                        </div>
-                                        <div class="card-body mb-4">
-
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <div class="card my-2">
+                                    <div class="card-header mt-4">
+                                        <h4>[[#{activo.editar}]]</h4>
+                                    </div>
+                                    <div class="card-body mb-4">
+                                        <div class="row">
                                             <!-- Placa -->
-                                            <div class="row">
-                                                <div class="form-group col-md-2">
-                                                    <label class="mb-2" for="activoPK.numeroJunta">[[#{activo.numero-junta}]]</label>
-                                                    <div th:if="${habilitareditarpkjunta == true}">
-                                                        <input type="number" class="form-control" name="activoPK.numeroJunta"
-                                                               th:field="*{activoPK.numeroJunta}" placeholder="4864" />
-                                                        <span class="text-danger" th:if="${#fields.hasErrors('activoPK.numeroJunta')}" th:errors="*{activoPK.numeroJunta}">Error Número Junta</span>
-                                                    </div>
-                                                    <div th:if="${habilitareditarpkjunta == false}">
-                                                        <input type="hidden" name="activoPK.numeroJunta" th:field="*{activoPK.numeroJunta}" />
-                                                        <input type="number" class="form-control" name="activoPK.numeroJuntaVisible" 
-                                                               th:field="*{activoPK.numeroJunta}" disabled="disabled" />
-                                                    </div>
+                                            <div class="form-group col-md-2">
+                                                <label class="mb-2" for="activoPK.numeroJunta">[[#{activo.numero-junta}]]</label>
+                                                <div th:if="${habilitareditarpkjunta == true}">
+                                                    <input type="number" class="form-control" name="activoPK.numeroJunta"
+                                                           th:field="*{activoPK.numeroJunta}" placeholder="4864" />
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('activoPK.numeroJunta')}" th:errors="*{activoPK.numeroJunta}">Error Número Junta</span>
                                                 </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="mb-2" for="activoPK.numeroActivo">[[#{activo.numero-activo}]]</label>
-                                                    <input type="hidden" name="activoPK.numeroActivo" th:field="*{activoPK.numeroActivo}" />
-                                                    <input type="number" class="form-control" name="activoPK.numeroActivoVisible"
-                                                           th:field="*{activoPK.numeroActivo}" disabled="disabled"/>
-                                                </div>
-                                                <div class="form-group mt-4 mb-4 col-md-2"></div>
-
-
-                                                <!-- Tomo/Folio/Asiento -->
-                                                <div class="form-group col-md-2">
-                                                    <label class="mb-2" for="tomo">[[#{activo.tomo}]]</label>
-                                                    <input type="number" class="form-control" name="tomo" 
-                                                           required="true" th:field="*{tomo}"/>
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="mb-2" for="folio">[[#{activo.folio}]]</label>
-                                                    <input type="number" class="form-control" name="folio" 
-                                                           required="true" th:field="*{folio}"/>
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="mb-2" for="asiento">[[#{activo.asiento}]]</label>
-                                                    <input type="number" class="form-control" name="asiento" 
-                                                           required="true" th:field="*{asiento}"/>
+                                                <div th:if="${habilitareditarpkjunta == false}">
+                                                    <input type="hidden" name="activoPK.numeroJunta" th:field="*{activoPK.numeroJunta}" />
+                                                    <input type="number" class="form-control" name="activoPK.numeroJuntaVisible" 
+                                                           th:field="*{activoPK.numeroJunta}" disabled="disabled" />
                                                 </div>
                                             </div>
+                                            <div class="form-group col-md-2">
+                                                <label class="mb-2" for="activoPK.numeroActivo">[[#{activo.numero-activo}]]</label>
+                                                <input type="hidden" name="activoPK.numeroActivo" th:field="*{activoPK.numeroActivo}" />
+                                                <input type="number" class="form-control" name="activoPK.numeroActivoVisible"
+                                                       th:field="*{activoPK.numeroActivo}" disabled="disabled"/>
+                                            </div>
+                                            <div class="form-group mt-4 mb-4 col-md-2"></div>
 
 
-                                            <!-- Descripción Activo -->
-                                            <div class="form-group mt-4 mb-4">
-                                                <label class="mb-2" for="detalleDescripcionActivo">[[#{activo.descripcion-activo}]]</label>
-                                                <select required="true" class="form-select" th:field="*{descripcionActivo.idDescripcionActivo}">
-                                                    <option th:each="descripcionactivoobjeto : ${descripcionactivolista}"
-                                                            th:value="${descripcionactivoobjeto.idDescripcionActivo}"
-                                                            th:text="${descripcionactivoobjeto.detalleDescripcionActivo}" 
-                                                            th:selected="${descripcionactivoobjeto.idDescripcionActivo==0}"></option>
+                                            <!-- Tomo/Folio/Asiento -->
+                                            <div class="form-group col-md-2">
+                                                <label class="mb-2" for="tomo">[[#{activo.tomo}]]</label>
+                                                <input type="number" class="form-control" name="tomo" 
+                                                       required="true" th:field="*{tomo}"/>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label class="mb-2" for="folio">[[#{activo.folio}]]</label>
+                                                <input type="number" class="form-control" name="folio" 
+                                                       required="true" th:field="*{folio}"/>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label class="mb-2" for="asiento">[[#{activo.asiento}]]</label>
+                                                <input type="number" class="form-control" name="asiento" 
+                                                       required="true" th:field="*{asiento}"/>
+                                            </div>
+                                        </div>
+
+
+                                        <!-- Descripción Activo -->
+                                        <div class="form-group mt-4 mb-4">
+                                            <label class="mb-2" for="detalleDescripcionActivo">[[#{activo.descripcion-activo}]]</label>
+                                            <select required="true" class="form-select" th:field="*{descripcionActivo.idDescripcionActivo}">
+                                                <option th:each="descripcionactivoobjeto : ${descripcionactivolista}"
+                                                        th:value="${descripcionactivoobjeto.idDescripcionActivo}"
+                                                        th:text="${descripcionactivoobjeto.detalleDescripcionActivo}" 
+                                                        th:selected="${descripcionactivoobjeto.idDescripcionActivo==0}"></option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Marca/Modelo/Serie -->
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label class="mb-2" for="marca">[[#{activo.marca}]]</label>
+                                                <input type="text" class="form-control" th:name="marca"  th:id="marca"
+                                                       th:value="${activoobjeto.marca != null} ? ${activoobjeto.marca} : #{activo.no-indica}"/>
+                                                <span class="text-danger" th:if="${#fields.hasErrors('marca')}" th:errors="*{marca}">Error Marca</span>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label class="mb-2" for="modelo">[[#{activo.modelo}]]</label>
+                                                <input type="text" class="form-control" th:name="modelo"  th:id="modelo"
+                                                       th:value="${activoobjeto.modelo != null} ? ${activoobjeto.modelo} : #{activo.no-indica}"/>
+                                                <span class="text-danger" th:if="${#fields.hasErrors('modelo')}" th:errors="*{modelo}">Error Modelo</span>
+                                            </div>
+                                            <div class="form-group col-md-12">
+                                                <label class="mb-2 mt-md-2" for="serie">[[#{activo.serie}]]</label>
+                                                <input type="text" class="form-control" th:name="serie"  th:id="serie" 
+                                                       th:value="${activoobjeto.serie != null} ? ${activoobjeto.serie} : #{activo.no-indica}"/>
+                                                <span class="text-danger" th:if="${#fields.hasErrors('serie')}" th:errors="*{serie}">Error Serie</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Otros Atributos -->
+                                        <div class="form-group mt-4 mb-4">
+                                            <label class="form-check-label" for="enReparacion">[[#{activo.en-reparacion}]]</label>
+                                            <input type="checkbox" class="form-check-input" name="enReparacion" 
+                                                   th:field="*{enReparacion}"/>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="input-group mb-2 col-md-12">
+                                                <label class="input-group-text col-md-2" for="detalleEstadoActivo">[[#{activo.estado-activo}]]</label>
+                                                <select required="true" class="form-select col-md-10" th:field="*{estadoActivo.idEstadoActivo}">
+                                                    <option th:each="estadoactivoobjeto : ${estadoactivolista}"
+                                                            th:value="${estadoactivoobjeto.idEstadoActivo}"
+                                                            th:text="${estadoactivoobjeto.detalleEstadoActivo}" 
+                                                            th:selected="${estadoactivoobjeto.idEstadoActivo==0}"></option>
                                                 </select>
                                             </div>
-
-                                            <!-- Marca/Modelo/Serie -->
-                                            <div class="row">
-                                                <div class="form-group col-md-6">
-                                                    <label class="mb-2" for="marca">[[#{activo.marca}]]</label>
-                                                    <input type="text" class="form-control" th:name="marca"  th:id="marca"
-                                                           th:value="${activoobjeto.marca != null} ? ${activoobjeto.marca} : #{activo.no-indica}"/>
-                                                    <span class="text-danger" th:if="${#fields.hasErrors('marca')}" th:errors="*{marca}">Error Marca</span>
-                                                </div>
-                                                <div class="form-group col-md-6">
-                                                    <label class="mb-2" for="modelo">[[#{activo.modelo}]]</label>
-                                                    <input type="text" class="form-control" th:name="modelo"  th:id="modelo"
-                                                           th:value="${activoobjeto.modelo != null} ? ${activoobjeto.modelo} : #{activo.no-indica}"/>
-                                                    <span class="text-danger" th:if="${#fields.hasErrors('modelo')}" th:errors="*{modelo}">Error Modelo</span>
-                                                </div>
-                                                <div class="form-group col-md-12">
-                                                    <label class="mb-2 mt-md-2" for="serie">[[#{activo.serie}]]</label>
-                                                    <input type="text" class="form-control" th:name="serie"  th:id="serie" 
-                                                           th:value="${activoobjeto.serie != null} ? ${activoobjeto.serie} : #{activo.no-indica}"/>
-                                                    <span class="text-danger" th:if="${#fields.hasErrors('serie')}" th:errors="*{serie}">Error Serie</span>
-                                                </div>
+                                            <div class="input-group mb-2 col-md-12">
+                                                <label class="input-group-text col-md-2" for="detalleNumeroAula">[[#{activo.numero-aula}]]</label>
+                                                <select required="true" class="form-select col-md-10" th:field="*{numeroAula.idNumeroAula}">
+                                                    <option th:each="numeroaulaobjeto : ${numeroaulalista}"
+                                                            th:value="${numeroaulaobjeto.idNumeroAula}"
+                                                            th:text="${numeroaulaobjeto.detalleNumeroAula}" 
+                                                            th:selected="${numeroaulaobjeto.idNumeroAula==0}"></option>
+                                                </select>
                                             </div>
-
-                                            <!-- Otros Atributos -->
-                                            <div class="form-group mt-4 mb-4">
-                                                <label class="form-check-label" for="enReparacion">[[#{activo.en-reparacion}]]</label>
-                                                <input type="checkbox" class="form-check-input" name="enReparacion" 
-                                                       th:field="*{enReparacion}"/>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="input-group mb-2 col-md-12">
-                                                    <label class="input-group-text col-md-2" for="detalleEstadoActivo">[[#{activo.estado-activo}]]</label>
-                                                    <select required="true" class="form-select col-md-10" th:field="*{estadoActivo.idEstadoActivo}">
-                                                        <option th:each="estadoactivoobjeto : ${estadoactivolista}"
-                                                                th:value="${estadoactivoobjeto.idEstadoActivo}"
-                                                                th:text="${estadoactivoobjeto.detalleEstadoActivo}" 
-                                                                th:selected="${estadoactivoobjeto.idEstadoActivo==0}"></option>
-                                                    </select>
-                                                </div>
-                                                <div class="input-group mb-2 col-md-12">
-                                                    <label class="input-group-text col-md-2" for="detalleNumeroAula">[[#{activo.numero-aula}]]</label>
-                                                    <select required="true" class="form-select col-md-10" th:field="*{numeroAula.idNumeroAula}">
-                                                        <option th:each="numeroaulaobjeto : ${numeroaulalista}"
-                                                                th:value="${numeroaulaobjeto.idNumeroAula}"
-                                                                th:text="${numeroaulaobjeto.detalleNumeroAula}" 
-                                                                th:selected="${numeroaulaobjeto.idNumeroAula==0}"></option>
-                                                    </select>
-                                                </div>
-                                                <div class="input-group mb-2 col-md-12">
-                                                    <label class="input-group-text col-md-2" for="detalleModoAdquisicion">[[#{activo.modo-adquisicion}]]</label>
-                                                    <select required="true" class="form-select col-md-10" th:field="*{modoAdquisicion.idModoAdquisicion}">
-                                                        <option th:each="modoadquisicionobjeto : ${modoadquisicionlista}"
-                                                                th:value="${modoadquisicionobjeto.idModoAdquisicion}"
-                                                                th:text="${modoadquisicionobjeto.detalleModoAdquisicion}" 
-                                                                th:selected="${modoadquisicionobjeto.idModoAdquisicion==0}"></option>
-                                                    </select>
-                                                </div>
+                                            <div class="input-group mb-2 col-md-12">
+                                                <label class="input-group-text col-md-2" for="detalleModoAdquisicion">[[#{activo.modo-adquisicion}]]</label>
+                                                <select required="true" class="form-select col-md-10" th:field="*{modoAdquisicion.idModoAdquisicion}">
+                                                    <option th:each="modoadquisicionobjeto : ${modoadquisicionlista}"
+                                                            th:value="${modoadquisicionobjeto.idModoAdquisicion}"
+                                                            th:text="${modoadquisicionobjeto.detalleModoAdquisicion}" 
+                                                            th:selected="${modoadquisicionobjeto.idModoAdquisicion==0}"></option>
+                                                </select>
                                             </div>
                                         </div>
 
+                                    </div>
+                                </div>
+
+                                <!-- Tabla Observaciones -->
+                                <div class="card my-5">
+                                    <div class="card-header mt-4">
+                                        <h4>[[#{activo.observaciones.titulo-lista}]]</h4>
+                                    </div>
+                                    <div class="card-body mb-4">
+                                        <div class="row">
+                                            <div class="row" th:if="${activoobjeto.activoObservaciones!=null}" >
+                                                <div class="col-md-12"> <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
+                                                    <a th:href="@{/activoobservacion/agregar/} + ${activoobjeto.activoPK.numeroJunta} + '/' + ${activoobjeto.activoPK.numeroActivo}"
+                                                       class="btn btn-primary btn-block" 
+                                                       data-toggle="modal" data-target="#agregarNuevo">
+                                                        <i class="fas fa-plus"></i> [[#{activo.observaciones.agregarnuevo}]]
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div th:if="${activoobjeto.activoObservaciones!=null and !activoobjeto.activoObservaciones.empty}">
+                                                <table id="miTabla" class="table table-stryped">
+                                                    <thead class="thead-dark">
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <!-- id -->
+                                                            <th th:text="#{generico.id}">#</th>
+                                                            <!-- Observaciones Atributos Obligatorios -->
+                                                            <th th:text="#{activo.numero-junta} + '/' + #{activo.numero-activo}"></th>
+                                                            <th th:text="'Ver: ' + #{activo.tomo} + '/' + #{activo.folio} + '/' + #{activo.asiento}"></th>
+
+                                                            <th th:text="#{activo.observaciones.tipo-anotacion}"></th>
+                                                            <th th:text="#{activo.observaciones.otro-detalle}"></th>
+
+                                                            <th th:text="#{accion.editar}"></th>
+                                                            <th th:text="#{accion.eliminar}"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr th:each="observacionesObjeto, contadorObservaciones : ${activoobjeto.activoObservaciones}">
+                                                            <td>[[${contadorObservaciones.count}]]</td>
+                                                            <td>[[${observacionesObjeto.idActivoObservacion}]]</td>
+                                                            <td>[[${observacionesObjeto.activoPK.numeroJunta}]]/[[${observacionesObjeto.activoPK.numeroActivo}]]</td>
+                                                            <td>Ver: [[${observacionesObjeto.tomo}]]/[[${observacionesObjeto.folio}]]/[[${observacionesObjeto.asiento}]]</td>
+
+                                                            <td th:if="${observacionesObjeto.tipoAnotacion != null}">[[${observacionesObjeto.tipoAnotacion.detalleTipoAnotacion}]]</td>
+                                                            <td th:if="${observacionesObjeto.tipoAnotacion == null}">-</td>
+                                                            <td>[[${observacionesObjeto.otroDetalle}]]</td>
+
+                                                            <td>
+                                                                <a th:href="@{/activoobservacion/editar/} + ${observacionesObjeto.idActivoObservacion}" 
+                                                                   class="btn btn-warning"><!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
+                                                                    <i class="fas fa-angle-double-right"></i> [[#{accion.editar}]]
+                                                                </a>
+                                                            </td>
+                                                            <td><!-- th:href='@{/activo/eliminar/} + ${objeto.activoPK.numeroJunta}'+ '/' + 
+                                                                                                    '${objeto.activoPK.numeroActivo}') -->
+                                                                <a th:data-id="${observacionesObjeto.idActivoObservacion}"
+                                                                   th:data-numeroactivo="${observacionesObjeto.activoPK.numeroActivo}"
+                                                                   th:data-numerojunta="${observacionesObjeto.activoPK.numeroJunta}"
+                                                                   th:data-tomo="${observacionesObjeto.tomo}"
+                                                                   th:data-folio="${observacionesObjeto.folio}"
+                                                                   th:data-asiento="${observacionesObjeto.asiento}"
+                                                                   th:data-tipoanotacion="${observacionesObjeto.tipoAnotacion.detalleTipoAnotacion}"
+                                                                   th:data-otrodetalle="${observacionesObjeto.otroDetalle}"
+                                                                   class="btn btn-danger"
+                                                                   onclick="confirmarEliminarObservacion(this)" > <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
+                                                                    <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                                                                </a>
+                                                            </td>
+
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="text-center p-2" th:if="${activoobjeto.activoObservaciones==null or activoobjeto.activoObservaciones.empty}">
+                                                <span th:text="#{activo.observaciones.lista-vacia}">Lista vacía</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

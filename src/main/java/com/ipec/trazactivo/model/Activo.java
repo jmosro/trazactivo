@@ -1,6 +1,7 @@
 package com.ipec.trazactivo.model;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
@@ -49,5 +50,8 @@ public class Activo implements Serializable {
     @JoinColumn(name="id_modo_adquisicion", referencedColumnName = "id_modo_adquisicion")
     @ManyToOne(cascade = CascadeType.PERSIST)
     private ModoAdquisicion modoAdquisicion;
+    
+    @OneToMany(mappedBy = "activo")
+    private List<ActivoObservacion> activoObservaciones;
     
 }
