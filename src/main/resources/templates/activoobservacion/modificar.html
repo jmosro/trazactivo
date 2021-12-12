@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:th="http://www.thymeleaf.org" 
+      class="h-100">
+    <head>
+        <title>Observación de un activo</title>
+        <meta charset="UTF-8"/>
+
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+        <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css}"/>
+        <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+        <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+        <!-- jquery-confirm -->
+        <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+
+        <script>
+            function confirmarEliminarObservacion(element) {
+                $.confirm({
+                    title: "Eliminar",
+                    content: "Está seguro de eliminar: " + "<br/><br/>" +
+                            "Id: " + element.getAttribute('data-id') + "<br/>" +
+                            "Placa: " + element.getAttribute('data-numerojunta') + "/" + element.getAttribute('data-numeroactivo') + "<br/>" +
+                            "Anotación: Ver " + element.getAttribute('data-tomo') + "/" + element.getAttribute('data-folio') +
+                            "/" + element.getAttribute('data-asiento') + "<br/>" +
+                            "Tipo anotación: " + element.getAttribute('data-tipoanotacion') + "<br/>" +
+                            "Otro detalle: " + element.getAttribute('data-otrodetalle') + "<br/>",
+                    buttons: {
+                        eliminar: {
+                            text: "Eliminar",
+                            btnClass: "btn-danger",
+                            action: function () {
+                                location.replace("/activoobservacion/eliminar/" + element.getAttribute('data-id'));
+                            }
+                        },
+                        cancelar: {
+                            text: "Cancelar"
+                        }
+                    }
+                });
+            }
+            ;
+        </script>
+    </head>
+
+    <body class="d-flex flex-column h-100">
+        <main class="flex-shrink-0">
+            <header th:replace="layout/plantilla :: header"></header>
+
+            <section class="mb-5">
+                <form th:action="@{/activoobservacion/guardar}" th:object="${activoobservacionobjeto}"
+                      method="POST" class="was-validated">
+
+                    <section>
+                        <div id="actions" class="py-4 mb-4 mt-4 bg-light">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-4 text-md-start text-sm-start">
+                                        <a th:href="@{/activo/editar/} + ${activoobservacionobjeto.activoPK.numeroJunta} + '/' + ${activoobservacionobjeto.activoPK.numeroActivo}"
+                                           class="btn btn-ligth btn-block"> <!-- editar/{numeroJunta}/{numeroActivo} -->
+                                            <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4 text-md-center text-sm-start">
+                                        <button type="submit" class="btn btn-success btn-block">
+                                            <i class="fas fa-check"></i> [[#{accion.guardar}]]
+                                        </button>
+                                    </div>
+                                    <div class="col-md-4 text-md-start text-sm-start" th:if="${habilitareliminar == true}" >
+                                        <a th:data-id="${activoobservacionobjeto.idActivoObservacion}"
+                                           th:data-numeroactivo="${activoobservacionobjeto.activoPK.numeroActivo}"
+                                           th:data-numerojunta="${activoobservacionobjeto.activoPK.numeroJunta}"
+                                           th:data-tomo="${activoobservacionobjeto.tomo}"
+                                           th:data-folio="${activoobservacionobjeto.folio}"
+                                           th:data-asiento="${activoobservacionobjeto.asiento}"
+                                           th:data-tipoanotacion="${activoobservacionobjeto.tipoAnotacion.detalleTipoAnotacion}"
+                                           th:data-otrodetalle="${activoobservacionobjeto.otroDetalle}"
+                                           class="btn btn-danger"
+                                           onclick="confirmarEliminarObservacion(this)" > <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
+                                            <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div id="details">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card">
+                                        <div class="card-header mt-4">
+                                            <h4>[[#{activo.observaciones.editar}]]</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group mt-4 mb-4">
+                                                <label class="mb-2" for="idActivoObservacion">[[#{generico.id}]]</label>
+                                                <input type="hidden" name="idActivoObservacion" th:field="*{idActivoObservacion}" />
+                                                <input type="number" class="form-control" name="idActivoObservacionVisible"
+                                                       th:field="*{idActivoObservacion}" disabled="disabled"/>
+                                            </div>
+
+                                            <div class="row">
+                                                <!-- Placa -->
+                                                <div class="form-group col-md-2">
+                                                    <label class="mb-2" for="activoPK.numeroJunta">[[#{activo.numero-junta}]]</label>
+                                                    <div th:if="${habilitarEditarJuntaPlaca == false}">
+                                                        <input type="hidden" name="activoPK.numeroJunta" th:field="*{activoPK.numeroJunta}" />
+                                                        <input type="number" class="form-control" name="activoPK.numeroJuntaVisible" 
+                                                               th:field="*{activoPK.numeroJunta}" disabled="disabled" />
+                                                    </div>
+                                                    <div th:if="${habilitarEditarJuntaPlaca == true}">
+                                                        <input type="number" class="form-control" name="activoPK.numeroJunta" 
+                                                               required="true" th:field="*{activoPK.numeroJunta}"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label class="mb-2" for="activoPK.numeroActivo">[[#{activo.numero-activo}]]</label>
+                                                    <div th:if="${habilitarEditarJuntaPlaca == false}">
+                                                        <input type="hidden" name="activoPK.numeroActivo" th:field="*{activoPK.numeroActivo}" />
+                                                        <input type="number" class="form-control" name="activoPK.numeroActivoVisible"
+                                                               th:field="*{activoPK.numeroActivo}" disabled="disabled"/>
+                                                    </div>
+                                                    <div th:if="${habilitarEditarJuntaPlaca == true}">
+                                                        <input type="number" class="form-control" name="activoPK.numeroActivo" 
+                                                               required="true" th:field="*{activoPK.numeroActivo}"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group mt-4 mb-4 col-md-2"></div>
+
+                                                <!-- Tomo/Folio/Asiento -->
+                                                <div class="form-group col-md-2">
+                                                    <label class="mb-2" for="tomo">[[#{activo.tomo}]]</label>
+                                                    <input type="number" class="form-control" name="tomo" 
+                                                           required="true" th:field="*{tomo}"/>
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label class="mb-2" for="folio">[[#{activo.folio}]]</label>
+                                                    <input type="number" class="form-control" name="folio" 
+                                                           required="true" th:field="*{folio}"/>
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label class="mb-2" for="asiento">[[#{activo.asiento}]]</label>
+                                                    <input type="number" class="form-control" name="asiento" 
+                                                           required="true" th:field="*{asiento}"/>
+                                                </div>
+                                            </div>
+
+                                            <!-- Tipo Anotacion -->
+                                            <div class="form-group mt-4 mb-4">
+                                                <label class="mb-2" for="tipoAnotacion">[[#{activo.observaciones.tipo-anotacion}]]</label>
+                                                <select required="true" class="form-select" th:field="*{tipoAnotacion.idTipoAnotacion}">
+                                                    <option th:each="tipoanotacionobjeto : ${tipoanotacionlista}"
+                                                            th:value="${tipoanotacionobjeto.idTipoAnotacion}"
+                                                            th:text="${tipoanotacionobjeto.detalleTipoAnotacion}" 
+                                                            th:selected="${tipoanotacionobjeto.idTipoAnotacion==0}"></option>
+                                                </select>
+                                                <!-- <span class="text-danger" th:if="${errorEliminar == true}">[[#{generico.DataIntegrityViolationException}]]</span> -->
+                                            </div>
+
+                                            <div class="form-group mt-4 mb-4">
+                                                <label class="mb-2" for="otroDetalle">[[#{generico.detalle}]]</label>
+                                                <input type="text" class="form-control" name="otroDetalle" 
+                                                       th:field="*{otroDetalle}"/><!-- required="true"-->
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </main>
+
+        <footer th:replace="layout/plantilla :: footer"></footer>
+    </body>
+</html>
