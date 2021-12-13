@@ -2,13 +2,14 @@ package com.ipec.trazactivo.controller;
 
 import com.ipec.trazactivo.model.ActivoObservacion;
 import com.ipec.trazactivo.model.ActivoPK;
+import com.ipec.trazactivo.model.TipoAnotacion;
 import com.ipec.trazactivo.service.ActivoObservacionServiceInterface;
 import com.ipec.trazactivo.service.TipoAnotacionServiceInterface;
+import java.util.Collections;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -38,17 +39,20 @@ public class ActivoObservacionController {
         model.addAttribute("tipoanotacionlista", tipoAnotacionlista);
         return "activoobservacion/modificar";
     }*/
-    
     @GetMapping("/agregar/{numeroJunta}/{numeroActivo}")
     public String agregarConJuntaPlaca(@ModelAttribute("activoobservacionobjeto") ActivoObservacion activoObservacion,
-                                       @PathVariable Integer numeroJunta, @PathVariable Integer numeroActivo, Model model) {
+            @PathVariable Integer numeroJunta, @PathVariable Integer numeroActivo, Model model) {
         activoObservacion = new ActivoObservacion();
         activoObservacion.setActivoPK(new ActivoPK(numeroActivo, numeroJunta));
         model.addAttribute("activoobservacionobjeto", activoObservacion);
         model.addAttribute("habilitareliminar", false);
         model.addAttribute("habilitarEditarJuntaPlaca", false);
+
         var tipoAnotacionlista = tipoAnotacionService.listarTodo();
+        Collections.sort(tipoAnotacionlista, (TipoAnotacion value1, TipoAnotacion value2)
+                -> value1.getDetalleTipoAnotacion().compareTo(value2.getDetalleTipoAnotacion()));
         model.addAttribute("tipoanotacionlista", tipoAnotacionlista);
+
         return "activoobservacion/modificar";
     }
 
@@ -57,8 +61,12 @@ public class ActivoObservacionController {
         if (errores.hasErrors()) {
             model.addAttribute("habilitareliminar", true);
             model.addAttribute("habilitarEditarJuntaPlaca", false);
+
             var tipoAnotacionlista = tipoAnotacionService.listarTodo();
+            Collections.sort(tipoAnotacionlista, (TipoAnotacion value1, TipoAnotacion value2)
+                    -> value1.getDetalleTipoAnotacion().compareTo(value2.getDetalleTipoAnotacion()));
             model.addAttribute("tipoanotacionlista", tipoAnotacionlista);
+
             return "activoobservacion/modificar";
         }
         activoObservacionService.guardar(activoObservacion);
@@ -71,8 +79,12 @@ public class ActivoObservacionController {
         model.addAttribute("activoobservacionobjeto", activoObservacion);
         model.addAttribute("habilitareliminar", true);
         model.addAttribute("habilitarEditarJuntaPlaca", false);
+
         var tipoAnotacionlista = tipoAnotacionService.listarTodo();
+        Collections.sort(tipoAnotacionlista, (TipoAnotacion value1, TipoAnotacion value2)
+                -> value1.getDetalleTipoAnotacion().compareTo(value2.getDetalleTipoAnotacion()));
         model.addAttribute("tipoanotacionlista", tipoAnotacionlista);
+
         return "activoobservacion/modificar";
     }
 
@@ -80,7 +92,7 @@ public class ActivoObservacionController {
     public String eliminar(@PathVariable Integer numeroEliminar, Model model) {
         ActivoObservacion activoObservacion = activoObservacionService.encontrarPorId(numeroEliminar);
         //try {
-            activoObservacionService.eliminar(activoObservacion);
+        activoObservacionService.eliminar(activoObservacion);
         //} catch (DataIntegrityViolationException ex) {
         //    model.addAttribute("activoobservacionobjeto", activoObservacion);
         //    model.addAttribute("errorEliminar", true);
