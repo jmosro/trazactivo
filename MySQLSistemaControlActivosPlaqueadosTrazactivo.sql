@@ -103,9 +103,11 @@ Tabla intermedias
 ****************/
 
 create table `activo_especialidad` (
+  `id_activo_especialidad` int not null auto_increment unique comment 'Activo Especialidad Id',
   `numero_activo` smallint not null comment 'Consecutivo del activo',
   `numero_junta` smallint not null comment 'Consecutivo de la junta administrativa',
   `id_especialidad_academica` int not null comment 'Especialidad Académica Id',
+  constraint PKACTIVOESPECIALIDAD primary key(`id_activo_especialidad`) comment 'Tabla activo especialidad llave primaria',
   constraint FKACTIVOESPECIALIDAD1 foreign key(`numero_activo`,`numero_junta`) 
              references `trazactivo`.`activo`(`numero_activo`,`numero_junta`) on delete cascade,
              -- Tabla activo llave foránea
@@ -114,9 +116,11 @@ create table `activo_especialidad` (
              -- Tabla activo llave foránea
 );
 create table `activo_responsable` (
+  `id_activo_responsable` int not null auto_increment unique comment 'Activo Responsable Id',
   `numero_activo` smallint not null comment 'Consecutivo del activo',
   `numero_junta` smallint not null comment 'Consecutivo de la junta administrativa',
   `id_persona_responsable` int not null comment 'Persona Responsable Id',
+  constraint PKACTIVORESPONSABLE primary key(`id_activo_responsable`) comment 'Tabla activo responsable llave primaria',
   constraint FKACTIVORESPONSABLE1 foreign key(`numero_activo`,`numero_junta`) 
              references `trazactivo`.`activo`(`numero_activo`,`numero_junta`) on delete cascade,
              -- Tabla activo llave foránea
@@ -126,6 +130,7 @@ create table `activo_responsable` (
 );
 
 create table `activo_observacion` (
+  `id_activo_observacion` int not null auto_increment unique comment 'Activo Observación Id',
   `numero_activo` smallint not null comment 'Consecutivo del activo',
   `numero_junta` smallint not null comment 'Consecutivo de la junta administrativa',
   -- Referencia
@@ -137,6 +142,7 @@ create table `activo_observacion` (
   `id_tipo_anotacion` int not null comment 'Tipo Anotacion Id',
   -- Otro detalle
   `otro_detalle` varchar(255) comment 'Otro detalle',
+  constraint PKOBSERVACION primary key(`id_activo_observacion`) comment 'Tabla activo observación llave primaria',
   constraint FKOBSERVACION1 foreign key(`numero_activo`,`numero_junta`) 
              references `trazactivo`.`activo`(`numero_activo`,`numero_junta`) on delete cascade,
              -- Tabla activo llave foránea
@@ -330,26 +336,26 @@ insert into trazactivo.persona_responsable values
 
 -- Tabla activo_responsable
 insert into trazactivo.activo_responsable values
-(2, 4864, 1), (2, 4864, 2), (2, 4864, 3),
-(3, 4864, 3),
-(4, 4864, 1),
-(5, 4864, 3), (5, 4864, 1),
-(6, 4864, 3), (5, 4864, 2),
-(7, 4864, 3);
+(default, 2, 4864, 1), (default, 2, 4864, 2), (default, 2, 4864, 3),
+(default, 3, 4864, 3),
+(default, 4, 4864, 1),
+(default, 5, 4864, 3), (default, 5, 4864, 1),
+(default, 6, 4864, 3), (default, 5, 4864, 2),
+(default, 7, 4864, 3);
 
 -- Tabla activo_observacion
 insert into trazactivo.activo_observacion values
-(2, 4864, 2, 10, 30, 3, default),
-(2, 4864, 2, 15, 13, 3, default),
-(2, 4864, 2, 12, 30, 3, default),
-(4, 4864, 2, 25, 15, 3, default),
-(4, 4864, 2, 27, 50, 4, default),
-(5, 4864, 2, 23, 30, 3, default);
+(default, 2, 4864, 2, 10, 30, 3, default),
+(default, 2, 4864, 2, 15, 13, 3, default),
+(default, 2, 4864, 2, 12, 30, 3, default),
+(default, 4, 4864, 2, 25, 15, 3, default),
+(default, 4, 4864, 2, 27, 50, 4, default),
+(default, 5, 4864, 2, 23, 30, 3, default);
 
 -- Tabla activo_especialidad
 insert into trazactivo.activo_especialidad values
-(2, 4864, 1),
-(2, 4864, 4),
-(2, 4864, 3),
-(4, 4864, 1),
-(5, 4864, 1);
+(default, 2, 4864, 1),
+(default, 2, 4864, 4),
+(default, 2, 4864, 3),
+(default, 4, 4864, 1),
+(default, 5, 4864, 1);
