@@ -4,6 +4,7 @@ import com.ipec.trazactivo.model.*;
 import com.ipec.trazactivo.service.*;
 import java.util.Collections;
 import java.util.List;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,21 +49,24 @@ public class ActivoController {
     }
 
     @GetMapping("/agregar")
-    public String agregar(@ModelAttribute("activoobjeto") Activo activo, Model model) {
+    public String agregar(@ModelAttribute("activoobjeto") Activo activo, Model model, HttpSession session) {
         model.addAttribute("activoobjeto", activo);
         model.addAttribute("habilitareliminar", false);
         model.addAttribute("habilitareditarpkjunta", true);
         model.addAttribute("habilitareditaranotaciones", false);
+        session.setAttribute("tipoaccionvista", "es agregar");
         ListarTodo(model);
 
         return "activo/modificar";
     }
 
-    @PostMapping("/guardar")
+    @PostMapping("/guardar") // @RequestParam(value = "nuevoregistro") Boolean nuevoRegistro,
     public String guardar(@Valid @ModelAttribute("activoobjeto") Activo activo,
-            BindingResult errores, Model model) {
+            BindingResult errores, Model model, HttpSession session) {
         //if(activo.getActivoPK().getNumeroJunta() == null)
-        //    errores.addError(new ObjectError("activoobjeto.activoPK.numeroJunta", "error null junta"));
+        //    errores.addError(new ObjectError("activoobjeto.activoPK.numeroJunta", "error null junta
+        String valor = (String) session.getAttribute("tipoaccionvista");
+
         if (errores.hasErrors()) {
             if (activo.getMarca() == "") {
                 activo.setMarca("no indica");
@@ -75,16 +79,31 @@ public class ActivoController {
             }
             model.addAttribute("activoobjeto", activo);
 
-            if (activo.getActivoPK().getNumeroActivo() == null) {
+            if (valor.contains("es agregar")) {
                 model.addAttribute("habilitareliminar", false);
                 model.addAttribute("habilitareditarpkjunta", true);
-            } else {
+                model.addAttribute("habilitareditaranotaciones", false);
+            } else if (valor.contains("es editar")) {
                 model.addAttribute("habilitareliminar", true);
                 model.addAttribute("habilitareditarpkjunta", false);
+                model.addAttribute("habilitareditaranotaciones", true);
             }
+
             ListarTodo(model);
 
             return "activo/modificar";
+        }
+        // Verificar que el activo a agregar no se encuentre registrado
+        if (valor.contains("es agregar")) {
+            Activo activoEncontrado = activoService.encontrarPorNumeroActivo(activo.getActivoPK());
+            if (activoEncontrado != null) {
+                model.addAttribute("habilitareliminar", false);
+                model.addAttribute("habilitareditarpkjunta", true);
+                model.addAttribute("habilitareditaranotaciones", false);
+                model.addAttribute("activoestaasignado", true);
+                ListarTodo(model);
+                return "activo/modificar";
+            }
         }
         activoService.guardar(activo);
         return "redirect:/activo";
@@ -92,11 +111,17 @@ public class ActivoController {
 
     @GetMapping("/editar/{numeroJunta}/{numeroActivo}")
     public String editar(@ModelAttribute("activoobjeto") Activo activo, Model model,
-            @PathVariable Integer numeroJunta, @PathVariable Integer numeroActivo) {
+            @PathVariable Integer numeroJunta, @PathVariable Integer numeroActivo, HttpSession session) {
         activo = activoService.encontrarPorNumeroActivo(new ActivoPK(numeroActivo, numeroJunta));
+        if(activo == null) {
+            return "redirect:/activo";
+        }
         model.addAttribute("activoobjeto", activo);
         model.addAttribute("habilitareliminar", true);
         model.addAttribute("habilitareditarpkjunta", false);
+        model.addAttribute("habilitareditaranotaciones", true);
+        session.setAttribute("tipoaccionvista", "es editar");
+
         ListarTodo(model);
 
         /*List<ActivoObservacion> prueba = activo.getActivoObservaciones();

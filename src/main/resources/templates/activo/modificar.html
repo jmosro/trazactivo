@@ -117,7 +117,7 @@
                                         </button>
                                     </div>
                                     <div class="col-md-4 text-md-start text-sm-start" th:if="${habilitareliminar == true}">
-                                        <a th:if="${activoobjeto.descripcionActivo != null}"
+                                        <a th:if="${activoobjeto != null and activoobjeto.descripcionActivo != null}"
                                            th:data-junta="${activoobjeto.activoPK.numeroJunta}"
                                            th:data-activo="${activoobjeto.activoPK.numeroActivo}"
                                            th:data-descripcion="${activoobjeto.descripcionActivo.detalleDescripcionActivo}"
@@ -149,12 +149,13 @@
                                     </div>
                                     <div class="card-body mb-4">
                                         <div class="row">
+                                            <label class="mb-2 col-12 text-success" th:if="${habilitareditarpkjunta == true}">[[#{activo.mensaje-valorcero}]]</label>
                                             <!-- Placa -->
                                             <div class="form-group col-md-2">
                                                 <label class="mb-2" for="activoPK.numeroJunta">[[#{activo.numero-junta}]]</label>
                                                 <div th:if="${habilitareditarpkjunta == true}">
                                                     <input type="number" class="form-control" name="activoPK.numeroJunta"
-                                                           th:field="*{activoPK.numeroJunta}" placeholder="4864" />
+                                                           th:field="*{activoPK.numeroJunta}" placeholder="4864" required="true" />
                                                     <span class="text-danger" th:if="${#fields.hasErrors('activoPK.numeroJunta')}" th:errors="*{activoPK.numeroJunta}">Error Número Junta</span>
                                                 </div>
                                                 <div th:if="${habilitareditarpkjunta == false}">
@@ -165,9 +166,18 @@
                                             </div>
                                             <div class="form-group col-md-2">
                                                 <label class="mb-2" for="activoPK.numeroActivo">[[#{activo.numero-activo}]]</label>
-                                                <input type="hidden" name="activoPK.numeroActivo" th:field="*{activoPK.numeroActivo}" />
-                                                <input type="number" class="form-control" name="activoPK.numeroActivoVisible"
-                                                       th:field="*{activoPK.numeroActivo}" disabled="disabled"/>
+                                                <div th:if="${habilitareditarpkjunta == true}">
+                                                    <input type="number" class="form-control" name="activoPK.numeroActivo"
+                                                           th:field="*{activoPK.numeroActivo}" required="true" />
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('activoPK.numeroActivo')}" th:errors="*{activoPK.numeroActivo}">Error Número Activo</span>
+                                                    <span class="text-danger" th:if="${activoestaasignado == true}">[[#{activo.mensaje-activoestaasignado}]]</span>
+                                                </div>
+                                                <div th:if="${habilitareditarpkjunta == false}">
+                                                    <input type="hidden" name="activoPK.numeroActivo" th:field="*{activoPK.numeroActivo}" />
+                                                    <input type="number" class="form-control" name="activoPK.numeroActivoVisible"
+                                                           th:field="*{activoPK.numeroActivo}" disabled="disabled"/>
+                                                </div>
+
                                             </div>
                                             <div class="form-group mt-4 mb-4 col-md-2"></div>
 
