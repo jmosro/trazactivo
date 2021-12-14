@@ -1,17 +1,7 @@
 package com.ipec.trazactivo.controller;
 
-import com.ipec.trazactivo.model.Activo;
-import com.ipec.trazactivo.model.ActivoPK;
-import com.ipec.trazactivo.model.DescripcionActivo;
-import com.ipec.trazactivo.model.EstadoActivo;
-import com.ipec.trazactivo.model.ModoAdquisicion;
-import com.ipec.trazactivo.model.NumeroAula;
-import com.ipec.trazactivo.service.ActivoObservacionServiceInterface;
-import com.ipec.trazactivo.service.ActivoServiceInterface;
-import com.ipec.trazactivo.service.DescripcionActivoServiceInterface;
-import com.ipec.trazactivo.service.EstadoActivoServiceInterface;
-import com.ipec.trazactivo.service.ModoAdquisicionServiceInterface;
-import com.ipec.trazactivo.service.NumeroAulaServiceInterface;
+import com.ipec.trazactivo.model.*;
+import com.ipec.trazactivo.service.*;
 import java.util.Collections;
 import java.util.List;
 import javax.validation.Valid;
@@ -45,6 +35,10 @@ public class ActivoController {
     private ModoAdquisicionServiceInterface modoAdquisicionService;
     @Autowired
     private ActivoObservacionServiceInterface activoObservacionService;
+    @Autowired
+    private EspecialidadAcademicaServiceInterface especialidadAcademicaService;
+    @Autowired
+    private PersonaResponsableServiceInterface personaResponsableService;
 
     @GetMapping("")
     public String inicio(Model model) {
@@ -59,24 +53,7 @@ public class ActivoController {
         model.addAttribute("habilitareliminar", false);
         model.addAttribute("habilitareditarpkjunta", true);
         model.addAttribute("habilitareditaranotaciones", false);
-
-        var descripcionActivo = descripcionActivoService.listarTodo();
-        var estadoActivo = estadoActivoService.listarTodo();
-        var numeroAula = numeoAulaService.listarTodo();
-        var modoAdquisicion = modoAdquisicionService.listarTodo();
-        // Ordenar alfabetico
-        Collections.sort(descripcionActivo, (DescripcionActivo value1, DescripcionActivo value2)
-                -> value1.getDetalleDescripcionActivo().compareTo(value2.getDetalleDescripcionActivo()));
-        Collections.sort(estadoActivo, (EstadoActivo value1, EstadoActivo value2)
-                -> value1.getDetalleEstadoActivo().compareTo(value2.getDetalleEstadoActivo()));
-        Collections.sort(numeroAula, (NumeroAula value1, NumeroAula value2)
-                -> value1.getDetalleNumeroAula().compareTo(value2.getDetalleNumeroAula()));
-        Collections.sort(modoAdquisicion, (ModoAdquisicion value1, ModoAdquisicion value2)
-                -> value1.getDetalleModoAdquisicion().compareTo(value2.getDetalleModoAdquisicion()));
-        model.addAttribute("descripcionactivolista", descripcionActivo);
-        model.addAttribute("estadoactivolista", estadoActivo);
-        model.addAttribute("numeroaulalista", numeroAula);
-        model.addAttribute("modoadquisicionlista", modoAdquisicion);
+        ListarTodo(model);
 
         return "activo/modificar";
     }
@@ -105,24 +82,7 @@ public class ActivoController {
                 model.addAttribute("habilitareliminar", true);
                 model.addAttribute("habilitareditarpkjunta", false);
             }
-
-            var descripcionActivo = descripcionActivoService.listarTodo();
-            var estadoActivo = estadoActivoService.listarTodo();
-            var numeroAula = numeoAulaService.listarTodo();
-            var modoAdquisicion = modoAdquisicionService.listarTodo();
-            // Ordenar alfabetico
-            Collections.sort(descripcionActivo, (DescripcionActivo value1, DescripcionActivo value2)
-                    -> value1.getDetalleDescripcionActivo().compareTo(value2.getDetalleDescripcionActivo()));
-            Collections.sort(estadoActivo, (EstadoActivo value1, EstadoActivo value2)
-                    -> value1.getDetalleEstadoActivo().compareTo(value2.getDetalleEstadoActivo()));
-            Collections.sort(numeroAula, (NumeroAula value1, NumeroAula value2)
-                    -> value1.getDetalleNumeroAula().compareTo(value2.getDetalleNumeroAula()));
-            Collections.sort(modoAdquisicion, (ModoAdquisicion value1, ModoAdquisicion value2)
-                    -> value1.getDetalleModoAdquisicion().compareTo(value2.getDetalleModoAdquisicion()));
-            model.addAttribute("descripcionactivolista", descripcionActivo);
-            model.addAttribute("estadoactivolista", estadoActivo);
-            model.addAttribute("numeroaulalista", numeroAula);
-            model.addAttribute("modoadquisicionlista", modoAdquisicion);
+            ListarTodo(model);
 
             return "activo/modificar";
         }
@@ -137,24 +97,7 @@ public class ActivoController {
         model.addAttribute("activoobjeto", activo);
         model.addAttribute("habilitareliminar", true);
         model.addAttribute("habilitareditarpkjunta", false);
-
-        var descripcionActivo = descripcionActivoService.listarTodo();
-        var estadoActivo = estadoActivoService.listarTodo();
-        var numeroAula = numeoAulaService.listarTodo();
-        var modoAdquisicion = modoAdquisicionService.listarTodo();
-        // Ordenar alfabetico
-        Collections.sort(descripcionActivo, (DescripcionActivo value1, DescripcionActivo value2)
-                -> value1.getDetalleDescripcionActivo().compareTo(value2.getDetalleDescripcionActivo()));
-        Collections.sort(estadoActivo, (EstadoActivo value1, EstadoActivo value2)
-                -> value1.getDetalleEstadoActivo().compareTo(value2.getDetalleEstadoActivo()));
-        Collections.sort(numeroAula, (NumeroAula value1, NumeroAula value2)
-                -> value1.getDetalleNumeroAula().compareTo(value2.getDetalleNumeroAula()));
-        Collections.sort(modoAdquisicion, (ModoAdquisicion value1, ModoAdquisicion value2)
-                -> value1.getDetalleModoAdquisicion().compareTo(value2.getDetalleModoAdquisicion()));
-        model.addAttribute("descripcionactivolista", descripcionActivo);
-        model.addAttribute("estadoactivolista", estadoActivo);
-        model.addAttribute("numeroaulalista", numeroAula);
-        model.addAttribute("modoadquisicionlista", modoAdquisicion);
+        ListarTodo(model);
 
         /*List<ActivoObservacion> prueba = activo.getActivoObservaciones();
         logger.info("Valores de prueba inicio");
@@ -172,5 +115,33 @@ public class ActivoController {
         Activo activo = activoService.encontrarPorNumeroActivo(new ActivoPK(numeroActivo, numeroJunta));
         activoService.eliminar(activo);
         return "redirect:/activo";
+    }
+
+    private void ListarTodo(Model model) {
+        var descripcionActivo = descripcionActivoService.listarTodo();
+        var estadoActivo = estadoActivoService.listarTodo();
+        var numeroAula = numeoAulaService.listarTodo();
+        var modoAdquisicion = modoAdquisicionService.listarTodo();
+        var especialidadAcademica = especialidadAcademicaService.listarTodo();
+        var personaResponsable = personaResponsableService.listarTodo();
+        // Ordenar alfabetico
+        Collections.sort(descripcionActivo, (DescripcionActivo value1, DescripcionActivo value2)
+                -> value1.getDetalleDescripcionActivo().compareTo(value2.getDetalleDescripcionActivo()));
+        Collections.sort(estadoActivo, (EstadoActivo value1, EstadoActivo value2)
+                -> value1.getDetalleEstadoActivo().compareTo(value2.getDetalleEstadoActivo()));
+        Collections.sort(numeroAula, (NumeroAula value1, NumeroAula value2)
+                -> value1.getDetalleNumeroAula().compareTo(value2.getDetalleNumeroAula()));
+        Collections.sort(modoAdquisicion, (ModoAdquisicion value1, ModoAdquisicion value2)
+                -> value1.getDetalleModoAdquisicion().compareTo(value2.getDetalleModoAdquisicion()));
+        Collections.sort(especialidadAcademica, (EspecialidadAcademica value1, EspecialidadAcademica value2)
+                -> value1.getDetalleEspecialidadAcademica().compareTo(value2.getDetalleEspecialidadAcademica()));
+        Collections.sort(personaResponsable, (PersonaResponsable value1, PersonaResponsable value2)
+                -> value1.getDetallePersonaResponsable().compareTo(value2.getDetallePersonaResponsable()));
+        model.addAttribute("descripcionactivolista", descripcionActivo);
+        model.addAttribute("estadoactivolista", estadoActivo);
+        model.addAttribute("numeroaulalista", numeroAula);
+        model.addAttribute("modoadquisicionlista", modoAdquisicion);
+        model.addAttribute("especialidadacademicalista", especialidadAcademica);
+        model.addAttribute("personaresponsablelista", personaResponsable);
     }
 }

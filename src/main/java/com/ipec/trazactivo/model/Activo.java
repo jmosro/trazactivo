@@ -46,6 +46,16 @@ public class Activo implements Serializable {
     @ManyToOne(cascade = CascadeType.PERSIST)
     private NumeroAula numeroAula;
     
+    // @Column(name = "id_especialidad_academica")
+    @JoinColumn(name="id_especialidad_academica", referencedColumnName = "id_especialidad_academica")
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private EspecialidadAcademica especialidadAcademica;
+    
+    // @Column(name = "id_persona_responsable")
+    @JoinColumn(name="id_persona_responsable", referencedColumnName = "id_persona_responsable")
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private PersonaResponsable personaResponsable;
+    
     // @Column(name = "id_modo_adquisicion")
     @JoinColumn(name="id_modo_adquisicion", referencedColumnName = "id_modo_adquisicion")
     @ManyToOne(cascade = CascadeType.PERSIST)

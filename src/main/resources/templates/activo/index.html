@@ -127,6 +127,8 @@
                                                 <th th:text="#{activo.en-reparacion}"></th>
                                                 <th th:text="#{activo.estado-activo}"></th>
                                                 <th th:text="#{activo.numero-aula}"></th>
+                                                <th th:text="#{activo.especialidad-academica}"></th>
+                                                <th th:text="#{activo.persona-responsable}"></th>
                                                 <th th:text="#{activo.modo-adquisicion}"></th>
                                                 <th th:text="#{activo.observaciones}"></th>
                                                 <th th:text="#{accion.editar}"></th>
@@ -153,6 +155,12 @@
                                                 <td th:if="${objeto.estadoActivo == null}">-</td>
                                                 <td th:if="${objeto.numeroAula != null}">[[${objeto.numeroAula.detalleNumeroAula}]]</td>
                                                 <td th:if="${objeto.numeroAula == null}">-</td>
+                                                
+                                                <td th:if="${objeto.especialidadAcademica != null}">[[${objeto.especialidadAcademica.detalleEspecialidadAcademica}]]</td>
+                                                <td th:if="${objeto.especialidadAcademica == null}">-</td>
+                                                <td th:if="${objeto.personaResponsable != null}">[[${objeto.personaResponsable.detallePersonaResponsable}]]</td>
+                                                <td th:if="${objeto.personaResponsable == null}">-</td>
+                                                
                                                 <td th:if="${objeto.modoAdquisicion != null}">[[${objeto.modoAdquisicion.detalleModoAdquisicion}]]</td>
                                                 <td th:if="${objeto.modoAdquisicion == null}">-</td>
 

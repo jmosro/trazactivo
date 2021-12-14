@@ -68,18 +68,23 @@ create table `activo` (
   
   -- [Campos opcionales]
   -- 5. Estado
-  -- id_estado_activo referencia a tabla estado_activo -- para 1 solo estado
+  -- id_estado_activo referencia a tabla estado_activo -- para 1 solo estado físico
   `id_estado_activo` int comment 'Estado del activo',
+    -- en_reparacion referencia un campo [true][false]
   `en_reparacion` boolean default false comment 'Estado en reparación',
   -- 6. Ubicación
-  -- id_numero_aula referencia a tabla numero_aula -- para 1 sola aula
+  -- id_numero_aula referencia a tabla numero_aula -- para 1 sola aula en ubicación
   `id_numero_aula` int comment 'Ubicación número aula',
-  -- se omite especialidad -- para varias especialidades - tabla intermedia
-  -- se omite responsable -- para varios responsables - tabla intermedia
-  -- 7. Modo de adquisición
+  -- 7. Especialidad Académica
+  -- id_especialidad_academica referencia a tabla especialidad_academica -- para 1 sola especialidad académica
+  `id_especialidad_academica` int comment 'Especialidad académica',
+  -- 8. Persona Responsable
+  -- id_persona_responsable referencia a tabla persona_responsable -- para 1 sola persona responsable
+  `id_persona_responsable` int comment 'Persona responsable',
+  -- 9. Modo de adquisición
   -- id_modo_adquisicion referencia a tabla modo_adquisicion -- para 1 solo tipo de adquisición
   `id_modo_adquisicion` int comment 'Modo de adquisición'
-  -- 8. Observaciones
+  -- 10. Observaciones
   -- se omite observaciones -- para varias observaciones - tabla intermedia
 );
 
@@ -101,33 +106,6 @@ alter table `trazactivo`.`activo` add constraint FKMODOADQUISICION
 /****************
 Tabla intermedias
 ****************/
-
-create table `activo_especialidad` (
-  `id_activo_especialidad` int not null auto_increment unique comment 'Activo Especialidad Id',
-  `numero_activo` smallint not null comment 'Consecutivo del activo',
-  `numero_junta` smallint not null comment 'Consecutivo de la junta administrativa',
-  `id_especialidad_academica` int not null comment 'Especialidad Académica Id',
-  constraint PKACTIVOESPECIALIDAD primary key(`id_activo_especialidad`) comment 'Tabla activo especialidad llave primaria',
-  constraint FKACTIVOESPECIALIDAD1 foreign key(`numero_activo`,`numero_junta`) 
-             references `trazactivo`.`activo`(`numero_activo`,`numero_junta`) on delete cascade,
-             -- Tabla activo llave foránea
-  constraint FKACTIVOESPECIALIDAD2 foreign key(`id_especialidad_academica`)
-             references `trazactivo`.`especialidad_academica`(`id_especialidad_academica`)
-             -- Tabla activo llave foránea
-);
-create table `activo_responsable` (
-  `id_activo_responsable` int not null auto_increment unique comment 'Activo Responsable Id',
-  `numero_activo` smallint not null comment 'Consecutivo del activo',
-  `numero_junta` smallint not null comment 'Consecutivo de la junta administrativa',
-  `id_persona_responsable` int not null comment 'Persona Responsable Id',
-  constraint PKACTIVORESPONSABLE primary key(`id_activo_responsable`) comment 'Tabla activo responsable llave primaria',
-  constraint FKACTIVORESPONSABLE1 foreign key(`numero_activo`,`numero_junta`) 
-             references `trazactivo`.`activo`(`numero_activo`,`numero_junta`) on delete cascade,
-             -- Tabla activo llave foránea
-  constraint FKACTIVORESPONSABLE2 foreign key(`id_persona_responsable`)
-             references `trazactivo`.`persona_responsable`(`id_persona_responsable`)
-             -- Tabla activo llave foránea
-);
 
 create table `activo_observacion` (
   `id_activo_observacion` int not null auto_increment unique comment 'Activo Observación Id',
@@ -291,7 +269,7 @@ insert into trazactivo.numero_aula values
 insert into trazactivo.especialidad_academica values
 (default, "técnica"),
 (default, "curso libre"),
-(default, "plande estudios"),
+(default, "plan de estudios"),
 (default, "administrativo");
 
 -- Tabla adquisicion
@@ -317,31 +295,22 @@ Insertar datos a la tabla activo - Ejemplos
 ******************************************/
 
 insert into trazactivo.activo values
-(default, 4864, 102, default, default, default, 1, 12, 39, default, default, default, default),
-(2, 4864, 102, default, default, default, 1, 12, 40, 1, 0, 2, 1),
-(3, 4864, 102, default, default, default, 1, 12, 41, 2, 0, 2, 3),
-(4, 4864, 102, default, default, default, 1, 12, 42, 4, 1, 3, 3),
-(5, 4864, 102, default, default, default, 1, 12, 43, 1, 0, 2, 1),
-(6, 4864, 102, default, default, default, 1, 14, 44, 2, 0, 2, 3),
-(7, 4864, 102, default, default, default, 1, 14, 45, 1, 0, 3, 3),
-(8, 4864, 102, default, default, default, 1, 14, 46, 1, 0, 2, 1),
-(9, 4864, 102, default, default, default, 1, 14, 47, 2, 0, 2, 3),
-(10, 4864, 102, default, default, default, 1, 15, 48, 1, 0, 3, 3);
+(default, 4864, 98, default, default, default, 1, 12, 39, default, default, default, default, default, default),
+(2, 4864, 98,   default, default, default, 1, 12, 40, 1, 0,  2, 1, 1, 1),
+(3, 4864, 98,   default, default, default, 1, 12, 41, 2, 0,  2, 1, 2, 3),
+(4, 4864, 80,   default, default, default, 1, 12, 42, 4, 1,  3, 1, 1, 3),
+(5, 4864, 80,   default, default, default, 1, 12, 43, 1, 0,  2, 2, 1, 1),
+(6, 4864, 80,   default, default, default, 1, 14, 44, 2, 0,  8, 2, 2, 3),
+(7, 4864, 30,   default, default, default, 1, 14, 45, 4, 1, 13, 1, 2, 3),
+(8, 4864, 102,  default, default, default, 1, 14, 46, 1, 0, 10, 3, 2, 1),
+(9, 4864, 102,  default, default, default, 1, 14, 47, 2, 1, 10, 3, 1, 3),
+(10, 4864, 102, default, default, default, 1, 15, 48, 1, 0, 10, 4, 1, 3);
 
 -- Tabla responsable
 insert into trazactivo.persona_responsable values
 (1, "profesor 1"),
 (2, "profesor 2"),
 (3, "profesor 3");
-
--- Tabla activo_responsable
-insert into trazactivo.activo_responsable values
-(default, 2, 4864, 1), (default, 2, 4864, 2), (default, 2, 4864, 3),
-(default, 3, 4864, 3),
-(default, 4, 4864, 1),
-(default, 5, 4864, 3), (default, 5, 4864, 1),
-(default, 6, 4864, 3), (default, 5, 4864, 2),
-(default, 7, 4864, 3);
 
 -- Tabla activo_observacion
 insert into trazactivo.activo_observacion values
@@ -351,11 +320,3 @@ insert into trazactivo.activo_observacion values
 (default, 4, 4864, 2, 25, 15, 3, default),
 (default, 4, 4864, 2, 27, 50, 4, default),
 (default, 5, 4864, 2, 23, 30, 3, default);
-
--- Tabla activo_especialidad
-insert into trazactivo.activo_especialidad values
-(default, 2, 4864, 1),
-(default, 2, 4864, 4),
-(default, 2, 4864, 3),
-(default, 4, 4864, 1),
-(default, 5, 4864, 1);

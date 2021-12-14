@@ -251,6 +251,24 @@
                                                 </select>
                                             </div>
                                             <div class="input-group mb-2 col-md-12">
+                                                <label class="input-group-text col-md-2" for="detalleEspecialidadAcademica">[[#{activo.especialidad-academica}]]</label>
+                                                <select required="true" class="form-select col-md-10" th:field="*{especialidadAcademica.idEspecialidadAcademica}">
+                                                    <option th:each="especialidadacademicaobjeto : ${especialidadacademicalista}"
+                                                            th:value="${especialidadacademicaobjeto.idEspecialidadAcademica}"
+                                                            th:text="${especialidadacademicaobjeto.detalleEspecialidadAcademica}" 
+                                                            th:selected="${especialidadacademicaobjeto.idEspecialidadAcademica==0}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="input-group mb-2 col-md-12">
+                                                <label class="input-group-text col-md-2" for="detallePersonaResponsable">[[#{activo.persona-responsable}]]</label>
+                                                <select required="true" class="form-select col-md-10" th:field="*{personaResponsable.idPersonaResponsable}">
+                                                    <option th:each="personaresponsableobjeto : ${personaresponsablelista}"
+                                                            th:value="${personaresponsableobjeto.idPersonaResponsable}"
+                                                            th:text="${personaresponsableobjeto.detallePersonaResponsable}" 
+                                                            th:selected="${personaresponsableobjeto.idPersonaResponsable==0}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="input-group mb-2 col-md-12">
                                                 <label class="input-group-text col-md-2" for="detalleModoAdquisicion">[[#{activo.modo-adquisicion}]]</label>
                                                 <select required="true" class="form-select col-md-10" th:field="*{modoAdquisicion.idModoAdquisicion}">
                                                     <option th:each="modoadquisicionobjeto : ${modoadquisicionlista}"
