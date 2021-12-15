@@ -95,6 +95,7 @@
                                                 <label class="mb-2" for="detalleTipoAnotacion">[[#{generico.detalle}]]</label>
                                                 <input type="text" class="form-control" name="detalleTipoAnotacion" 
                                                        required="true" th:field="*{detalleTipoAnotacion}"/>
+                                                <span class="text-danger" th:if="${errorEliminar == true}">[[#{generico.DataIntegrityViolationException}]]</span>
                                             </div>                    
                                         </div>
                                     </div>

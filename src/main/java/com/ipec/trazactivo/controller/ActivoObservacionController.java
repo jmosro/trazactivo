@@ -1,9 +1,11 @@
 package com.ipec.trazactivo.controller;
 
+import com.ipec.trazactivo.model.Activo;
 import com.ipec.trazactivo.model.ActivoObservacion;
 import com.ipec.trazactivo.model.ActivoPK;
 import com.ipec.trazactivo.model.TipoAnotacion;
 import com.ipec.trazactivo.service.ActivoObservacionServiceInterface;
+import com.ipec.trazactivo.service.ActivoServiceInterface;
 import com.ipec.trazactivo.service.TipoAnotacionServiceInterface;
 import java.util.Collections;
 import javax.validation.Valid;
@@ -29,6 +31,8 @@ public class ActivoObservacionController {
     private ActivoObservacionServiceInterface activoObservacionService;
     @Autowired
     private TipoAnotacionServiceInterface tipoAnotacionService;
+    @Autowired
+    private ActivoServiceInterface activoService;
 
     /*@GetMapping("/agregar")
     public String agregar(@ModelAttribute("activoobservacionobjeto") ActivoObservacion activoObservacion, Model model) {
@@ -42,18 +46,24 @@ public class ActivoObservacionController {
     @GetMapping("/agregar/{numeroJunta}/{numeroActivo}")
     public String agregarConJuntaPlaca(@ModelAttribute("activoobservacionobjeto") ActivoObservacion activoObservacion,
             @PathVariable Integer numeroJunta, @PathVariable Integer numeroActivo, Model model) {
-        activoObservacion = new ActivoObservacion();
-        activoObservacion.setActivoPK(new ActivoPK(numeroActivo, numeroJunta));
-        model.addAttribute("activoobservacionobjeto", activoObservacion);
-        model.addAttribute("habilitareliminar", false);
-        model.addAttribute("habilitarEditarJuntaPlaca", false);
+        ActivoPK activoPK = new ActivoPK(numeroActivo, numeroJunta);
+        Activo activo = activoService.encontrarPorNumeroActivo(activoPK);
+        if (activo != null) { // si existe el activo
+            activoObservacion = new ActivoObservacion();
+            activoObservacion.setActivoPK(activoPK);
+            model.addAttribute("activoobservacionobjeto", activoObservacion);
+            model.addAttribute("habilitareliminar", false);
+            model.addAttribute("habilitarEditarJuntaPlaca", false);
 
-        var tipoAnotacionlista = tipoAnotacionService.listarTodo();
-        Collections.sort(tipoAnotacionlista, (TipoAnotacion value1, TipoAnotacion value2)
-                -> value1.getDetalleTipoAnotacion().compareTo(value2.getDetalleTipoAnotacion()));
-        model.addAttribute("tipoanotacionlista", tipoAnotacionlista);
+            var tipoAnotacionlista = tipoAnotacionService.listarTodo();
+            Collections.sort(tipoAnotacionlista, (TipoAnotacion value1, TipoAnotacion value2)
+                    -> value1.getDetalleTipoAnotacion().compareTo(value2.getDetalleTipoAnotacion()));
+            model.addAttribute("tipoanotacionlista", tipoAnotacionlista);
 
-        return "activoobservacion/modificar";
+            return "activoobservacion/modificar";
+        } else {
+            return "redirect:/activo";
+        }
     }
 
     @PostMapping("/guardar")
@@ -76,6 +86,9 @@ public class ActivoObservacionController {
     @GetMapping("/editar/{idActivoObservacion}")
     public String editar(@ModelAttribute("activoobservacionobjeto") ActivoObservacion activoObservacion, Model model) {
         activoObservacion = activoObservacionService.encontrarPorId(activoObservacion.getIdActivoObservacion());
+        if (activoObservacion == null) {
+            return "redirect:/activo";
+        }
         model.addAttribute("activoobservacionobjeto", activoObservacion);
         model.addAttribute("habilitareliminar", true);
         model.addAttribute("habilitarEditarJuntaPlaca", false);
@@ -91,15 +104,9 @@ public class ActivoObservacionController {
     @GetMapping("/eliminar/{numeroEliminar}")
     public String eliminar(@PathVariable Integer numeroEliminar, Model model) {
         ActivoObservacion activoObservacion = activoObservacionService.encontrarPorId(numeroEliminar);
-        //try {
-        activoObservacionService.eliminar(activoObservacion);
-        //} catch (DataIntegrityViolationException ex) {
-        //    model.addAttribute("activoobservacionobjeto", activoObservacion);
-        //    model.addAttribute("errorEliminar", true);
-        //    var tipoAnotacionlista = tipoAnotacionService.listarTodo();
-        //    model.addAttribute("tipoanotacionlista", tipoAnotacionlista);
-        //    return "activoobservacion/modificar";
-        //}
+        if (activoObservacion != null) {
+            activoObservacionService.eliminar(activoObservacion);
+        }
         return "redirect:/activo";
     }
 }

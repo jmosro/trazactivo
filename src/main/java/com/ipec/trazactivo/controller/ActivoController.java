@@ -113,7 +113,7 @@ public class ActivoController {
     public String editar(@ModelAttribute("activoobjeto") Activo activo, Model model,
             @PathVariable Integer numeroJunta, @PathVariable Integer numeroActivo, HttpSession session) {
         activo = activoService.encontrarPorNumeroActivo(new ActivoPK(numeroActivo, numeroJunta));
-        if(activo == null) {
+        if (activo == null) {
             return "redirect:/activo";
         }
         model.addAttribute("activoobjeto", activo);
@@ -138,7 +138,9 @@ public class ActivoController {
     public String eliminar(@PathVariable Integer numeroJunta,
             @PathVariable Integer numeroActivo) {
         Activo activo = activoService.encontrarPorNumeroActivo(new ActivoPK(numeroActivo, numeroJunta));
-        activoService.eliminar(activo);
+        if (activo != null) {
+            activoService.eliminar(activo);
+        }
         return "redirect:/activo";
     }
 

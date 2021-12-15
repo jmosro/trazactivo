@@ -20,53 +20,58 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/especialidadacademica")
 public class EspecialidadAcademicaController {
-    
+
     private final Logger logger = LoggerFactory.getLogger(EspecialidadAcademicaController.class);
-    
+
     @Autowired
     private EspecialidadAcademicaServiceInterface especialidadAcademicaService;
-    
+
     @GetMapping("")
     public String inicio(Model model) {
         List<EspecialidadAcademica> especialidadAcademicaTodo = especialidadAcademicaService.listarTodo();
         model.addAttribute("especialidadacademicatodo", especialidadAcademicaTodo);
         return "especialidadacademica/index";
     }
-    
+
     @GetMapping("/agregar")
     public String agregar(@ModelAttribute("especialidadacademicaobjeto") EspecialidadAcademica especialidadAcademica, Model model) {
         model.addAttribute("especialidadacademicaobjeto", especialidadAcademica);
         model.addAttribute("habilitareliminar", false);
         return "especialidadacademica/modificar";
     }
-    
+
     @PostMapping("/guardar")
     public String guardar(@Valid @ModelAttribute("especialidadacademicaobjeto") EspecialidadAcademica especialidadAcademica, Errors errores, Model model) {
-        if(errores.hasErrors()) {
+        if (errores.hasErrors()) {
             model.addAttribute("habilitareliminar", true);
             return "especialidadacademica/modificar";
         }
         especialidadAcademicaService.guardar(especialidadAcademica);
         return "redirect:/especialidadacademica";
     }
-    
+
     @GetMapping("/editar/{idEspecialidadAcademica}")
     public String editar(@ModelAttribute("especialidadacademicaobjeto") EspecialidadAcademica especialidadAcademica, Model model) {
         especialidadAcademica = especialidadAcademicaService.encontrarPorId(especialidadAcademica.getIdEspecialidadAcademica());
+        if (especialidadAcademica == null) {
+            return "redirect:/especialidadacademica";
+        }
         model.addAttribute("especialidadacademicaobjeto", especialidadAcademica);
         model.addAttribute("habilitareliminar", true);
         return "especialidadacademica/modificar";
     }
-    
+
     @GetMapping("/eliminar/{numeroEliminar}")
     public String eliminar(@PathVariable Integer numeroEliminar, Model model) {
         EspecialidadAcademica especialidadObjeto = especialidadAcademicaService.encontrarPorId(numeroEliminar);
-        try {
-            especialidadAcademicaService.eliminar(especialidadObjeto);
-        } catch (DataIntegrityViolationException ex) {
-            model.addAttribute("especialidadacademicaobjeto", especialidadObjeto);
-            model.addAttribute("errorEliminar", true);
-            return "especialidadacademica/modificar";
+        if (especialidadObjeto != null) {
+            try {
+                especialidadAcademicaService.eliminar(especialidadObjeto);
+            } catch (DataIntegrityViolationException ex) {
+                model.addAttribute("especialidadacademicaobjeto", especialidadObjeto);
+                model.addAttribute("errorEliminar", true);
+                return "especialidadacademica/modificar";
+            }
         }
         return "redirect:/especialidadacademica";
     }

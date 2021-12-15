@@ -20,53 +20,58 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/tipoanotacion")
 public class TipoAnotacionController {
-    
+
     private final Logger logger = LoggerFactory.getLogger(TipoAnotacionController.class);
-    
+
     @Autowired
     private TipoAnotacionServiceInterface tipoAnotacionService;
-    
+
     @GetMapping("")
     public String inicio(Model model) {
         List<TipoAnotacion> tipoAnotacionTodo = tipoAnotacionService.listarTodo();
         model.addAttribute("tipoanotaciontodo", tipoAnotacionTodo);
         return "tipoanotacion/index";
     }
-    
+
     @GetMapping("/agregar")
     public String agregar(@ModelAttribute("tipoanotacionobjeto") TipoAnotacion tipoAnotacion, Model model) {
         model.addAttribute("tipoanotacionobjeto", tipoAnotacion);
         model.addAttribute("habilitareliminar", false);
         return "tipoanotacion/modificar";
     }
-    
+
     @PostMapping("/guardar")
     public String guardar(@Valid @ModelAttribute("tipoanotacionobjeto") TipoAnotacion tipoAnotacion, Errors errores, Model model) {
-        if(errores.hasErrors()) {
+        if (errores.hasErrors()) {
             model.addAttribute("habilitareliminar", true);
             return "tipoanotacion/modificar";
         }
         tipoAnotacionService.guardar(tipoAnotacion);
         return "redirect:/tipoanotacion";
     }
-    
+
     @GetMapping("/editar/{idTipoAnotacion}")
     public String editar(@ModelAttribute("tipoanotacionobjeto") TipoAnotacion tipoAnotacion, Model model) {
         tipoAnotacion = tipoAnotacionService.encontrarPorId(tipoAnotacion.getIdTipoAnotacion());
+        if (tipoAnotacion == null) {
+            return "redirect:/tipoanotacion";
+        }
         model.addAttribute("tipoanotacionobjeto", tipoAnotacion);
         model.addAttribute("habilitareliminar", true);
         return "tipoanotacion/modificar";
     }
-    
+
     @GetMapping("/eliminar/{numeroEliminar}")
     public String eliminar(@PathVariable Integer numeroEliminar, Model model) {
         TipoAnotacion anotacionObjeto = tipoAnotacionService.encontrarPorId(numeroEliminar);
-        try {
-            tipoAnotacionService.eliminar(anotacionObjeto);
-        } catch (DataIntegrityViolationException ex) {
-            model.addAttribute("tipoanotacionobjeto", anotacionObjeto);
-            model.addAttribute("errorEliminar", true);
-            return "tipoanotacion/modificar";
+        if (anotacionObjeto != null) {
+            try {
+                tipoAnotacionService.eliminar(anotacionObjeto);
+            } catch (DataIntegrityViolationException ex) {
+                model.addAttribute("tipoanotacionobjeto", anotacionObjeto);
+                model.addAttribute("errorEliminar", true);
+                return "tipoanotacion/modificar";
+            }
         }
         return "redirect:/tipoanotacion";
     }
