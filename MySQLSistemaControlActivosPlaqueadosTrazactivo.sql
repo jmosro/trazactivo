@@ -298,23 +298,17 @@ insert into trazactivo.tipo_anotacion values
 Insertar datos a la tabla activo - Ejemplos
 ******************************************/
 
-insert into trazactivo.activo values
-(default, 4864, 98, default, default, default, 1, 12, 39, default, default, default, default, default, default),
-(2, 4864, 98,   default, default, default, 1, 12, 40, 1, 0,  2, 1, 1, 1),
-(3, 4864, 98,   default, default, default, 1, 12, 41, 2, 0,  2, 1, 2, 3),
-(4, 4864, 80,   default, default, default, 1, 12, 42, 4, 1,  3, 1, 1, 3),
-(5, 4864, 80,   default, default, default, 1, 12, 43, 1, 0,  2, 2, 1, 1),
-(6, 4864, 80,   default, default, default, 1, 14, 44, 2, 0,  8, 2, 2, 3),
-(7, 4864, 30,   default, default, default, 1, 14, 45, 4, 1, 13, 1, 2, 3),
-(8, 4864, 102,  default, default, default, 1, 14, 46, 1, 0, 10, 3, 2, 1),
-(9, 4864, 102,  default, default, default, 1, 14, 47, 2, 1, 10, 3, 1, 3),
-(10, 4864, 102, default, default, default, 1, 15, 48, 1, 0, 10, 4, 1, 3);
-
 -- Tabla responsable
 insert into trazactivo.persona_responsable values
-(1, "profesor 1"),
-(2, "profesor 2"),
-(3, "profesor 3");
+(default, "profesor 1"),
+(default, "profesor 2"),
+(default, "profesor 3");
+
+insert into trazactivo.activo values
+(default, 4864, 40, default, default, default, 1, 10, 40, 1, 0,  2, 1, 1, 1),
+(default, 4864, 36, default, default, default, 1, 10, 41, 2, 0,  5, 2, 2, 3),
+(default, 4864, 109, default, default, default, 1, 12, 42, 4, 1,  3, 3, 1, 3),
+(default, 4864, 153, default, default, default, 1, 12, 43, 1, 0,  7, 2, 1, 1);
 
 -- Tabla activo_observacion
 insert into trazactivo.activo_observacion values
@@ -323,4 +317,4 @@ insert into trazactivo.activo_observacion values
 (default, 2, 4864, 2, 12, 30, 3, default),
 (default, 4, 4864, 2, 25, 15, 3, default),
 (default, 4, 4864, 2, 27, 50, 4, default),
-(default, 5, 4864, 2, 23, 30, 3, default);
+(default, 1, 4864, 2, 23, 30, 3, default);
