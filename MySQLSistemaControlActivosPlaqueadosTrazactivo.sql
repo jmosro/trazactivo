@@ -100,9 +100,13 @@ alter table `trazactivo`.`activo` add constraint FKESTADOACTIVO
             -- Tabla activo llave foránea
 alter table `trazactivo`.`activo` add constraint FKNUMEROAULA
 			foreign key(`id_numero_aula`) references `trazactivo`.`numero_aula`(`id_numero_aula`);
+alter table `trazactivo`.`activo` add constraint FKESPECIALIDADACADEMICA
+       foreign key (`id_especialidad_academica`) references `trazactivo`.`especialidad_academica` (`id_especialidad_academica`);
+alter table `trazactivo`.`activo` add constraint FKPERSONARESPONSABLE
+       foreign key (`id_persona_responsable`) references `trazactivo`.`persona_responsable` (`id_persona_responsable`);
 alter table `trazactivo`.`activo` add constraint FKMODOADQUISICION
 			foreign key(`id_modo_adquisicion`) references `trazactivo`.`modo_adquisicion`(`id_modo_adquisicion`);
-
+            
 /****************
 Tabla intermedias
 ****************/
