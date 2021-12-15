@@ -69,13 +69,27 @@
                                         </button>
                                     </div>
                                     <div class="col-md-4 text-md-start text-sm-start" th:if="${habilitareliminar == true}" >
-                                        <a th:data-id="${activoobservacionobjeto.idActivoObservacion}"
+                                        <a th:if="${activoobservacionobjeto != null and activoobservacionobjeto.tipoAnotacion != null}"
+                                           th:data-id="${activoobservacionobjeto.idActivoObservacion}"
                                            th:data-numeroactivo="${activoobservacionobjeto.activoPK.numeroActivo}"
                                            th:data-numerojunta="${activoobservacionobjeto.activoPK.numeroJunta}"
                                            th:data-tomo="${activoobservacionobjeto.tomo}"
                                            th:data-folio="${activoobservacionobjeto.folio}"
                                            th:data-asiento="${activoobservacionobjeto.asiento}"
                                            th:data-tipoanotacion="${activoobservacionobjeto.tipoAnotacion.detalleTipoAnotacion}"
+                                           th:data-otrodetalle="${activoobservacionobjeto.otroDetalle}"
+                                           class="btn btn-danger"
+                                           onclick="confirmarEliminarObservacion(this)" > <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
+                                            <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                                        </a>
+                                        <a th:if="${activoobservacionobjeto != null and activoobservacionobjeto.tipoAnotacion == null}"
+                                           th:data-id="${activoobservacionobjeto.idActivoObservacion}"
+                                           th:data-numeroactivo="${activoobservacionobjeto.activoPK.numeroActivo}"
+                                           th:data-numerojunta="${activoobservacionobjeto.activoPK.numeroJunta}"
+                                           th:data-tomo="${activoobservacionobjeto.tomo}"
+                                           th:data-folio="${activoobservacionobjeto.folio}"
+                                           th:data-asiento="${activoobservacionobjeto.asiento}"
+                                           th:data-tipoanotacion="#{activo.sindescripcion}"
                                            th:data-otrodetalle="${activoobservacionobjeto.otroDetalle}"
                                            class="btn btn-danger"
                                            onclick="confirmarEliminarObservacion(this)" > <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
@@ -152,12 +166,14 @@
                                             <!-- Tipo Anotacion -->
                                             <div class="form-group mt-4 mb-4">
                                                 <label class="mb-2" for="tipoAnotacion">[[#{activo.observaciones.tipo-anotacion}]]</label>
-                                                <select required="true" class="form-select" th:field="*{tipoAnotacion.idTipoAnotacion}">
+                                                <select required="true" class="form-select" th:field="*{tipoAnotacion.idTipoAnotacion}"
+                                                        th:if="${!tipoanotacionlista.empty}">
                                                     <option th:each="tipoanotacionobjeto : ${tipoanotacionlista}"
                                                             th:value="${tipoanotacionobjeto.idTipoAnotacion}"
                                                             th:text="${tipoanotacionobjeto.detalleTipoAnotacion}" 
                                                             th:selected="${tipoanotacionobjeto.idTipoAnotacion==0}"></option>
                                                 </select>
+                                                <label class="input-group-text col-md-12 text-danger" th:if="${tipoanotacionlista.empty}">[[#{generico.nodatos-disponibles}]]</label>
                                                 <!-- <span class="text-danger" th:if="${errorEliminar == true}">[[#{generico.DataIntegrityViolationException}]]</span> -->
                                             </div>
 

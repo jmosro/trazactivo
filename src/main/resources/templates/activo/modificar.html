@@ -128,7 +128,17 @@
                                            onclick="confirmarEliminarActivo(this)" > <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
                                             <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
                                         </a>
-
+                                        <a th:if="${activoobjeto != null and activoobjeto.descripcionActivo == null}"
+                                           th:data-junta="${activoobjeto.activoPK.numeroJunta}"
+                                           th:data-activo="${activoobjeto.activoPK.numeroActivo}"
+                                           th:data-descripcion="#{activo.sindescripcion}"
+                                           th:data-marca="${activoobjeto.marca}"
+                                           th:data-modelo="${activoobjeto.modelo}"
+                                           th:data-serie="${activoobjeto.serie}"
+                                           class="btn btn-danger"
+                                           onclick="confirmarEliminarActivo(this)" > <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
+                                            <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -204,12 +214,14 @@
                                         <!-- Descripción Activo -->
                                         <div class="form-group mt-4 mb-4">
                                             <label class="mb-2" for="detalleDescripcionActivo">[[#{activo.descripcion-activo}]]</label>
-                                            <select required="true" class="form-select" th:field="*{descripcionActivo.idDescripcionActivo}">
+                                            <select required="true" class="form-select" th:field="*{descripcionActivo.idDescripcionActivo}"
+                                                    th:if="${!descripcionactivolista.empty}">
                                                 <option th:each="descripcionactivoobjeto : ${descripcionactivolista}"
                                                         th:value="${descripcionactivoobjeto.idDescripcionActivo}"
                                                         th:text="${descripcionactivoobjeto.detalleDescripcionActivo}" 
                                                         th:selected="${descripcionactivoobjeto.idDescripcionActivo==0}"></option>
                                             </select>
+                                            <label class="input-group-text col-md-10 text-danger" th:if="${descripcionactivolista.empty}">[[#{generico.nodatos-disponibles}]]</label>
                                         </div>
 
                                         <!-- Marca/Modelo/Serie -->
@@ -244,48 +256,58 @@
                                         <div class="row">
                                             <div class="input-group mb-2 col-md-12">
                                                 <label class="input-group-text col-md-2" for="detalleEstadoActivo">[[#{activo.estado-activo}]]</label>
-                                                <select required="true" class="form-select col-md-10" th:field="*{estadoActivo.idEstadoActivo}">
+                                                <select required="true" class="form-select col-md-10" th:field="*{estadoActivo.idEstadoActivo}"
+                                                        th:if="${!estadoactivolista.empty}">
                                                     <option th:each="estadoactivoobjeto : ${estadoactivolista}"
                                                             th:value="${estadoactivoobjeto.idEstadoActivo}"
                                                             th:text="${estadoactivoobjeto.detalleEstadoActivo}" 
                                                             th:selected="${estadoactivoobjeto.idEstadoActivo==0}"></option>
                                                 </select>
+                                                <label class="input-group-text col-md-10 text-danger" th:if="${estadoactivolista.empty}">[[#{generico.nodatos-disponibles}]]</label>
                                             </div>
                                             <div class="input-group mb-2 col-md-12">
                                                 <label class="input-group-text col-md-2" for="detalleNumeroAula">[[#{activo.numero-aula}]]</label>
-                                                <select required="true" class="form-select col-md-10" th:field="*{numeroAula.idNumeroAula}">
+                                                <select required="true" class="form-select col-md-10" th:field="*{numeroAula.idNumeroAula}"
+                                                        th:if="${!numeroaulalista.empty}">
                                                     <option th:each="numeroaulaobjeto : ${numeroaulalista}"
                                                             th:value="${numeroaulaobjeto.idNumeroAula}"
                                                             th:text="${numeroaulaobjeto.detalleNumeroAula}" 
                                                             th:selected="${numeroaulaobjeto.idNumeroAula==0}"></option>
                                                 </select>
+                                                <label class="input-group-text col-md-10 text-danger" th:if="${numeroaulalista.empty}">[[#{generico.nodatos-disponibles}]]</label>
                                             </div>
                                             <div class="input-group mb-2 col-md-12">
                                                 <label class="input-group-text col-md-2" for="detalleEspecialidadAcademica">[[#{activo.especialidad-academica}]]</label>
-                                                <select required="true" class="form-select col-md-10" th:field="*{especialidadAcademica.idEspecialidadAcademica}">
+                                                <select required="true" class="form-select col-md-10" th:field="*{especialidadAcademica.idEspecialidadAcademica}"
+                                                        th:if="${!especialidadacademicalista.empty}">
                                                     <option th:each="especialidadacademicaobjeto : ${especialidadacademicalista}"
                                                             th:value="${especialidadacademicaobjeto.idEspecialidadAcademica}"
                                                             th:text="${especialidadacademicaobjeto.detalleEspecialidadAcademica}" 
                                                             th:selected="${especialidadacademicaobjeto.idEspecialidadAcademica==0}"></option>
                                                 </select>
+                                                <label class="input-group-text col-md-10 text-danger" th:if="${especialidadacademicalista.empty}">[[#{generico.nodatos-disponibles}]]</label>
                                             </div>
                                             <div class="input-group mb-2 col-md-12">
                                                 <label class="input-group-text col-md-2" for="detallePersonaResponsable">[[#{activo.persona-responsable}]]</label>
-                                                <select required="true" class="form-select col-md-10" th:field="*{personaResponsable.idPersonaResponsable}">
+                                                <select required="true" class="form-select col-md-10" th:field="*{personaResponsable.idPersonaResponsable}"
+                                                        th:if="${!personaresponsablelista.empty}">
                                                     <option th:each="personaresponsableobjeto : ${personaresponsablelista}"
                                                             th:value="${personaresponsableobjeto.idPersonaResponsable}"
                                                             th:text="${personaresponsableobjeto.detallePersonaResponsable}" 
                                                             th:selected="${personaresponsableobjeto.idPersonaResponsable==0}"></option>
                                                 </select>
+                                                <label class="input-group-text col-md-10 text-danger" th:if="${personaresponsablelista.empty}">[[#{generico.nodatos-disponibles}]]</label>
                                             </div>
                                             <div class="input-group mb-2 col-md-12">
                                                 <label class="input-group-text col-md-2" for="detalleModoAdquisicion">[[#{activo.modo-adquisicion}]]</label>
-                                                <select required="true" class="form-select col-md-10" th:field="*{modoAdquisicion.idModoAdquisicion}">
+                                                <select required="true" class="form-select col-md-10" th:field="*{modoAdquisicion.idModoAdquisicion}"
+                                                        th:if="${!modoadquisicionlista.empty}">
                                                     <option th:each="modoadquisicionobjeto : ${modoadquisicionlista}"
                                                             th:value="${modoadquisicionobjeto.idModoAdquisicion}"
                                                             th:text="${modoadquisicionobjeto.detalleModoAdquisicion}" 
                                                             th:selected="${modoadquisicionobjeto.idModoAdquisicion==0}"></option>
                                                 </select>
+                                                <label class="input-group-text col-md-10 text-danger" th:if="${modoadquisicionlista.empty}">[[#{generico.nodatos-disponibles}]]</label>
                                             </div>
                                         </div>
 
@@ -345,13 +367,27 @@
                                                             </td>
                                                             <td><!-- th:href='@{/activo/eliminar/} + ${objeto.activoPK.numeroJunta}'+ '/' + 
                                                                                                     '${objeto.activoPK.numeroActivo}') -->
-                                                                <a th:data-id="${observacionesObjeto.idActivoObservacion}"
+                                                                <a th:if="${observacionesObjeto != null and observacionesObjeto.tipoAnotacion != null}"
+                                                                   th:data-id="${observacionesObjeto.idActivoObservacion}"
                                                                    th:data-numeroactivo="${observacionesObjeto.activoPK.numeroActivo}"
                                                                    th:data-numerojunta="${observacionesObjeto.activoPK.numeroJunta}"
                                                                    th:data-tomo="${observacionesObjeto.tomo}"
                                                                    th:data-folio="${observacionesObjeto.folio}"
                                                                    th:data-asiento="${observacionesObjeto.asiento}"
                                                                    th:data-tipoanotacion="${observacionesObjeto.tipoAnotacion.detalleTipoAnotacion}"
+                                                                   th:data-otrodetalle="${observacionesObjeto.otroDetalle}"
+                                                                   class="btn btn-danger"
+                                                                   onclick="confirmarEliminarObservacion(this)" > <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
+                                                                    <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                                                                </a>
+                                                                <a th:if="${observacionesObjeto != null and observacionesObjeto.tipoAnotacion == null}"
+                                                                   th:data-id="${observacionesObjeto.idActivoObservacion}"
+                                                                   th:data-numeroactivo="${observacionesObjeto.activoPK.numeroActivo}"
+                                                                   th:data-numerojunta="${observacionesObjeto.activoPK.numeroJunta}"
+                                                                   th:data-tomo="${observacionesObjeto.tomo}"
+                                                                   th:data-folio="${observacionesObjeto.folio}"
+                                                                   th:data-asiento="${observacionesObjeto.asiento}"
+                                                                   th:data-tipoanotacion="#{activo.sindescripcion}"
                                                                    th:data-otrodetalle="${observacionesObjeto.otroDetalle}"
                                                                    class="btn btn-danger"
                                                                    onclick="confirmarEliminarObservacion(this)" > <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->

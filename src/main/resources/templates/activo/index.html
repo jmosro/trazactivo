@@ -155,12 +155,12 @@
                                                 <td th:if="${objeto.estadoActivo == null}">-</td>
                                                 <td th:if="${objeto.numeroAula != null}">[[${objeto.numeroAula.detalleNumeroAula}]]</td>
                                                 <td th:if="${objeto.numeroAula == null}">-</td>
-                                                
+
                                                 <td th:if="${objeto.especialidadAcademica != null}">[[${objeto.especialidadAcademica.detalleEspecialidadAcademica}]]</td>
                                                 <td th:if="${objeto.especialidadAcademica == null}">-</td>
                                                 <td th:if="${objeto.personaResponsable != null}">[[${objeto.personaResponsable.detallePersonaResponsable}]]</td>
                                                 <td th:if="${objeto.personaResponsable == null}">-</td>
-                                                
+
                                                 <td th:if="${objeto.modoAdquisicion != null}">[[${objeto.modoAdquisicion.detalleModoAdquisicion}]]</td>
                                                 <td th:if="${objeto.modoAdquisicion == null}">-</td>
 
@@ -179,7 +179,7 @@
                                                 </td>
                                                 <td><!-- th:href='@{/activo/eliminar/} + ${objeto.activoPK.numeroJunta}'+ '/' + 
                                                                                         '${objeto.activoPK.numeroActivo}') -->
-                                                    <a th:if="${objeto.descripcionActivo != null}"
+                                                    <a th:if="${objeto != null and objeto.descripcionActivo != null}"
                                                        th:data-junta="${objeto.activoPK.numeroJunta}"
                                                        th:data-activo="${objeto.activoPK.numeroActivo}"
                                                        th:data-descripcion="${objeto.descripcionActivo.detalleDescripcionActivo}"
@@ -190,7 +190,17 @@
                                                        onclick="confirmarEliminar(this)"> <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
                                                         <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
                                                     </a>
-
+                                                    <a th:if="${objeto != null and objeto.descripcionActivo == null}"
+                                                       th:data-junta="${objeto.activoPK.numeroJunta}"
+                                                       th:data-activo="${objeto.activoPK.numeroActivo}"
+                                                       th:data-descripcion="#{activo.sindescripcion}"
+                                                       th:data-marca="${objeto.marca}"
+                                                       th:data-modelo="${objeto.modelo}"
+                                                       th:data-serie="${objeto.serie}"
+                                                       class ="btn btn-danger"
+                                                       onclick="confirmarEliminar(this)"> <!-- sec:authorize="hasRole('ROLE_ADMIN')" -->
+                                                        <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                                                    </a>
                                                 </td>
 
                                             </tr>

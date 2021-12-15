@@ -56,7 +56,7 @@ create table `activo` (
   `numero_junta` smallint not null comment 'Consecutivo de la junta administrativa',
   -- 2. Descripción
   -- id_descripcion_activo referencia a tabla descripcion_activo
-  `id_descripcion_activo` int not null comment 'Descripción del activo',
+  `id_descripcion_activo` int comment 'Descripción del activo',
   -- 3. Manufacturación
   `marca` varchar(100) not null default 'no indica' comment 'Manufacturación marca',
   `modelo` varchar(100) not null default 'no indica' comment 'Manufacturación modelo',
@@ -117,7 +117,7 @@ create table `activo_observacion` (
   `asiento` smallint not null  comment 'Registrado en asiento',
   -- Tipo de anotación
   -- id_tipo_anotacion referencia a tabla tipo_anotacion -- para 1 solo tipo de anotación
-  `id_tipo_anotacion` int not null comment 'Tipo Anotacion Id',
+  `id_tipo_anotacion` int comment 'Tipo Anotacion Id',
   -- Otro detalle
   `otro_detalle` varchar(255) comment 'Otro detalle',
   constraint PKOBSERVACION primary key(`id_activo_observacion`) comment 'Tabla activo observación llave primaria',
