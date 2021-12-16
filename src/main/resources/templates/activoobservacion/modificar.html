@@ -11,12 +11,19 @@
         <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
         <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
         <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+        
+        <!-- Librería para buscar un dato en el select -->
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap-select/css/bootstrap-select.min.css}"/>
+        <script th:src="@{/webjars/bootstrap-select/js/bootstrap-select.min.js}"></script>
 
         <!-- jquery-confirm -->
         <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 
         <script>
+            $(document).ready(function () {
+                $('select').selectpicker();
+            });
             function confirmarEliminarObservacion(element) {
                 $.confirm({
                     title: "Eliminar",
@@ -164,10 +171,10 @@
                                             </div>
 
                                             <!-- Tipo Anotacion -->
-                                            <div class="form-group mt-4 mb-4">
-                                                <label class="mb-2" for="tipoAnotacion">[[#{activo.observaciones.tipo-anotacion}]]</label>
-                                                <select required="true" class="form-select" th:field="*{tipoAnotacion.idTipoAnotacion}"
-                                                        th:if="${!tipoanotacionlista.empty}">
+                                            <div class="input-group mt-4 mb-4 col-md-12">
+                                                <label class="input-group-text col-md-2 mb-2" for="tipoAnotacion">[[#{activo.observaciones.tipo-anotacion}]]</label>
+                                                <select required="true" class="col-md-10" th:field="*{tipoAnotacion.idTipoAnotacion}"
+                                                        th:if="${!tipoanotacionlista.empty}" data-live-search="true">
                                                     <option th:each="tipoanotacionobjeto : ${tipoanotacionlista}"
                                                             th:value="${tipoanotacionobjeto.idTipoAnotacion}"
                                                             th:text="${tipoanotacionobjeto.detalleTipoAnotacion}" 

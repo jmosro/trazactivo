@@ -12,6 +12,10 @@
         <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
         <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 
+        <!-- Librería para buscar un dato en el select -->
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap-select/css/bootstrap-select.min.css}"/>
+        <script th:src="@{/webjars/bootstrap-select/js/bootstrap-select.min.js}"></script>
+
         <!-- jquery-confirm -->
         <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
@@ -29,9 +33,9 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.11.3/b-2.0.1/b-colvis-2.0.1/b-html5-2.0.1/b-print-2.0.1/r-2.2.9/sc-2.0.5/datatables.min.js"></script>
 
-
         <script>
             $(document).ready(function () {
+                $('select').selectpicker();
                 $('#miTabla').DataTable({
                     dom: "<'row'<'col-md-12 mb-2 mt-2'B>>" +
                             "<'row'<'col-md-6'l><'col-md-6'f>>" +
@@ -67,6 +71,7 @@
                     }
                 });
             }
+            ;
             function confirmarEliminarObservacion(element) {
                 $.confirm({
                     title: "Eliminar",
@@ -212,16 +217,18 @@
 
 
                                         <!-- Descripción Activo -->
-                                        <div class="form-group mt-4 mb-4">
-                                            <label class="mb-2" for="detalleDescripcionActivo">[[#{activo.descripcion-activo}]]</label>
-                                            <select required="true" class="form-select" th:field="*{descripcionActivo.idDescripcionActivo}"
-                                                    th:if="${!descripcionactivolista.empty}">
+                                        <div class="input-group mt-4 mb-4 col-md-12">
+                                            <label class="input-group-text mb-2 col-md-2" for="detalleDescripcionActivo">[[#{activo.descripcion-activo}]]</label>
+                                            <select required="true" class="col-md-10" th:field="*{descripcionActivo.idDescripcionActivo}"
+                                                    th:if="${!descripcionactivolista.empty}" data-live-search="true">
                                                 <option th:each="descripcionactivoobjeto : ${descripcionactivolista}"
                                                         th:value="${descripcionactivoobjeto.idDescripcionActivo}"
                                                         th:text="${descripcionactivoobjeto.detalleDescripcionActivo}" 
                                                         th:selected="${descripcionactivoobjeto.idDescripcionActivo==0}"></option>
                                             </select>
+
                                             <label class="input-group-text col-md-10 text-danger" th:if="${descripcionactivolista.empty}">[[#{generico.nodatos-disponibles}]]</label>
+
                                         </div>
 
                                         <!-- Marca/Modelo/Serie -->
@@ -256,8 +263,8 @@
                                         <div class="row">
                                             <div class="input-group mb-2 col-md-12">
                                                 <label class="input-group-text col-md-2" for="detalleEstadoActivo">[[#{activo.estado-activo}]]</label>
-                                                <select required="true" class="form-select col-md-10" th:field="*{estadoActivo.idEstadoActivo}"
-                                                        th:if="${!estadoactivolista.empty}">
+                                                <select required="true" class="col-md-10" th:field="*{estadoActivo.idEstadoActivo}"
+                                                        th:if="${!estadoactivolista.empty}" data-live-search="true">
                                                     <option th:each="estadoactivoobjeto : ${estadoactivolista}"
                                                             th:value="${estadoactivoobjeto.idEstadoActivo}"
                                                             th:text="${estadoactivoobjeto.detalleEstadoActivo}" 
@@ -267,8 +274,8 @@
                                             </div>
                                             <div class="input-group mb-2 col-md-12">
                                                 <label class="input-group-text col-md-2" for="detalleNumeroAula">[[#{activo.numero-aula}]]</label>
-                                                <select required="true" class="form-select col-md-10" th:field="*{numeroAula.idNumeroAula}"
-                                                        th:if="${!numeroaulalista.empty}">
+                                                <select required="true" class="col-md-10" th:field="*{numeroAula.idNumeroAula}"
+                                                        th:if="${!numeroaulalista.empty}" data-live-search="true">
                                                     <option th:each="numeroaulaobjeto : ${numeroaulalista}"
                                                             th:value="${numeroaulaobjeto.idNumeroAula}"
                                                             th:text="${numeroaulaobjeto.detalleNumeroAula}" 
@@ -278,8 +285,8 @@
                                             </div>
                                             <div class="input-group mb-2 col-md-12">
                                                 <label class="input-group-text col-md-2" for="detalleEspecialidadAcademica">[[#{activo.especialidad-academica}]]</label>
-                                                <select required="true" class="form-select col-md-10" th:field="*{especialidadAcademica.idEspecialidadAcademica}"
-                                                        th:if="${!especialidadacademicalista.empty}">
+                                                <select required="true" class="col-md-10" th:field="*{especialidadAcademica.idEspecialidadAcademica}"
+                                                        th:if="${!especialidadacademicalista.empty}" data-live-search="true">
                                                     <option th:each="especialidadacademicaobjeto : ${especialidadacademicalista}"
                                                             th:value="${especialidadacademicaobjeto.idEspecialidadAcademica}"
                                                             th:text="${especialidadacademicaobjeto.detalleEspecialidadAcademica}" 
@@ -289,8 +296,8 @@
                                             </div>
                                             <div class="input-group mb-2 col-md-12">
                                                 <label class="input-group-text col-md-2" for="detallePersonaResponsable">[[#{activo.persona-responsable}]]</label>
-                                                <select required="true" class="form-select col-md-10" th:field="*{personaResponsable.idPersonaResponsable}"
-                                                        th:if="${!personaresponsablelista.empty}">
+                                                <select required="true" class="col-md-10" th:field="*{personaResponsable.idPersonaResponsable}"
+                                                        th:if="${!personaresponsablelista.empty}"  data-live-search="true">
                                                     <option th:each="personaresponsableobjeto : ${personaresponsablelista}"
                                                             th:value="${personaresponsableobjeto.idPersonaResponsable}"
                                                             th:text="${personaresponsableobjeto.detallePersonaResponsable}" 
@@ -300,8 +307,8 @@
                                             </div>
                                             <div class="input-group mb-2 col-md-12">
                                                 <label class="input-group-text col-md-2" for="detalleModoAdquisicion">[[#{activo.modo-adquisicion}]]</label>
-                                                <select required="true" class="form-select col-md-10" th:field="*{modoAdquisicion.idModoAdquisicion}"
-                                                        th:if="${!modoadquisicionlista.empty}">
+                                                <select required="true" class="col-md-10" th:field="*{modoAdquisicion.idModoAdquisicion}"
+                                                        th:if="${!modoadquisicionlista.empty}" data-live-search="true">
                                                     <option th:each="modoadquisicionobjeto : ${modoadquisicionlista}"
                                                             th:value="${modoadquisicionobjeto.idModoAdquisicion}"
                                                             th:text="${modoadquisicionobjeto.detalleModoAdquisicion}" 
