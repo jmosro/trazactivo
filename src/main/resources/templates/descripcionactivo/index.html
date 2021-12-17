@@ -5,7 +5,8 @@
     <head>
         <title>Tipos de descripciones de los activos plaqueados</title>
         <meta charset="UTF-8"/>
-
+        
+        <!-- Bootstrap - Font-Awesome - JQuery -->
         <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
         <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css}"/>
         <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
@@ -13,20 +14,20 @@
         <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 
         <!-- Datatables dependencias
-        https://datatables.net/download/index
-        Step 1. Choose a styling framework: Bootstrap 5
-        Step 2. Select packages: DataTables
-        Extensions: Buttons[Column, HTML5 export[JSZip, pdfmake],
-        Print view], Responsive
-        -->
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.11.3/b-2.0.1/b-colvis-2.0.1/b-html5-2.0.1/b-print-2.0.1/r-2.2.9/datatables.min.css"/>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-        <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.11.3/b-2.0.1/b-colvis-2.0.1/b-html5-2.0.1/b-print-2.0.1/r-2.2.9/datatables.min.js"></script>
+         https://datatables.net/download/index
+         Step 1. Choose a styling framework: Bootstrap 5
+         Step 2. Select packages: DataTables
+         Extensions: Buttons[Column, HTML5 export[JSZip]], Responsive, Scroller -->
+        <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.11.3/b-2.1.1/b-colvis-2.1.1/b-html5-2.1.1/r-2.2.9/sc-2.0.5/datatables.min.css"/> -->
+        <!-- <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.11.3/b-2.1.1/b-colvis-2.1.1/b-html5-2.1.1/r-2.2.9/sc-2.0.5/datatables.min.js"></script> -->
+        <link rel="stylesheet" type="text/css" href="/libraries/datatables/datatables.min.css"/>
+        <script type="text/javascript" src="/libraries/datatables/datatables.min.js"></script>
 
         <!-- jquery-confirm -->
-        <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+        <!-- <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css"/>-->
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>-->
+        <link rel="stylesheet"  href="/libraries/jquery-confirm/jquery-confirm.min.css"/>
+        <script src="/libraries/jquery-confirm/jquery-confirm.min.js"></script>
 
         <script>
             $(document).ready(function () {
@@ -102,7 +103,7 @@
                                     <h4>[[#{descripcionActivo.titulo-lista}]]</h4>
                                 </div>
                                 <div th:if="${descripcionactivotodo != null and !descripcionactivotodo.empty}">
-                                    <table id="miTabla" class="table table-stryped">
+                                    <table id="miTabla" class="table table-striped" style="width: 100%">
                                         <thead class="thead-dark">
                                             <tr>
                                                 <th>#</th>
