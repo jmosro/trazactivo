@@ -283,9 +283,9 @@ insert into trazactivo.especialidad_academica values
 -- Tabla adquisicion
 insert into trazactivo.modo_adquisicion values
 (default, "No indica"),
-(default, "Por junta administrativa"),
+(default, "Por Junta Administrativa"),
 (default, "Por recursos del MEP"),
-(default, "Por recursos del MEP ley 7372"),
+(default, "Por recursos del MEP Ley 7372"),
 (default, "Por donación persona física"),
 (default, "Por donación persona jurídica");
 
@@ -311,16 +311,18 @@ Insertar datos a la tabla activo - Ejemplos
 ******************************************/
 
 insert into trazactivo.activo values
-(default, 4864, 41, default, default, default, 1, 10, 40, 1, 0, 2, 1, 4, 1),
-(default, 4864, 37, default, default, default, 1, 10, 41, 2, 0, 5, 2, 2, 3),
-(default, 4864, 110, default, default, default, 1, 12, 42, 4, 1, 3, 3, 3, 3),
-(default, 4864, 154, default, default, default, 1, 12, 43, 1, 0, 7, 2, 1, 1);
+/*Activo,Junta,Descripción,Marca,Modelo,Serie,                  T, F, A, Estado,Reparación,Aula,Especialidad,Responsable,Adquisición */
+(default, 4864,         41, "AMD","Inspiration","200-1340-300", 1,10,40,       2,        0,   2,           1,          1,          4),
+(default, 4864,         37, default, default, default,          1,10,41,       2,        0,   5,           2,          2,          4),
+(default, 4864,        108, default, default, default,          1,12,42,       4,        1,  15,           3,          3,          2),
+(default, 4864,        154, "LG", "NeoChef", "PV300-123F",      1,12,43,       1,        0,  10,           1,          1,          1);
 
 -- Tabla activo_observacion
 insert into trazactivo.activo_observacion values
-(default, 2, 4864, 2, 10, 30, 3, default),
-(default, 2, 4864, 2, 15, 13, 3, default),
-(default, 2, 4864, 2, 12, 30, 3, default),
-(default, 4, 4864, 2, 25, 15, 3, default),
-(default, 4, 4864, 2, 27, 50, 4, default),
-(default, 1, 4864, 2, 23, 30, 3, default);
+/* id   ,activo,junta, T, F, A, TipoAnotación, OtroDetalle */
+(default,     2, 4864, 2,10,30,             6,    "Del 10 de enero de 2021"),
+(default,     2, 4864, 2,15,13,             2,    "Regular"),
+(default,     2, 4864, 2,12,30,             4,    "Laboratorio Portatil"),
+(default,     4, 4864, 2,25,15,             4,    "Aula 4"),
+(default,     4, 4864, 2,27,50,             5,    "Por obsolescencia"),
+(default,     1, 4864, 2,23,30,             6,    default);
