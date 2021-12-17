@@ -169,17 +169,20 @@
                                                 <div class="form-group col-md-2">
                                                     <label class="mb-2" for="tomo">[[#{activo.tomo}]]</label>
                                                     <input type="number" class="form-control" name="tomo" 
-                                                           required="true" th:field="*{tomo}"/>
+                                                           required="true" th:field="*{tomo}"
+                                                           min="0" pattern="^[0-9]+" />
                                                 </div>
                                                 <div class="form-group col-md-2">
                                                     <label class="mb-2" for="folio">[[#{activo.folio}]]</label>
                                                     <input type="number" class="form-control" name="folio" 
-                                                           required="true" th:field="*{folio}"/>
+                                                           required="true" th:field="*{folio}"
+                                                           min="0" pattern="^[0-9]+" />
                                                 </div>
                                                 <div class="form-group col-md-2">
                                                     <label class="mb-2" for="asiento">[[#{activo.asiento}]]</label>
                                                     <input type="number" class="form-control" name="asiento" 
-                                                           required="true" th:field="*{asiento}"/>
+                                                           required="true" th:field="*{asiento}"
+                                                           min="0" pattern="^[0-9]+" />
                                                 </div>
                                             </div>
 

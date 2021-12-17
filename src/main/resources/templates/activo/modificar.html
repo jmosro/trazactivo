@@ -170,7 +170,8 @@
                                                 <label class="mb-2" for="activoPK.numeroJunta">[[#{activo.numero-junta}]]</label>
                                                 <div th:if="${habilitareditarpkjunta == true}">
                                                     <input type="number" class="form-control" name="activoPK.numeroJunta"
-                                                           th:field="*{activoPK.numeroJunta}" placeholder="4864" required="true" />
+                                                           th:field="*{activoPK.numeroJunta}" placeholder="4864" required="true" 
+                                                           min="0" pattern="^[0-9]+" />
                                                     <span class="text-danger" th:if="${#fields.hasErrors('activoPK.numeroJunta')}" th:errors="*{activoPK.numeroJunta}">Error Número Junta</span>
                                                 </div>
                                                 <div th:if="${habilitareditarpkjunta == false}">
@@ -183,7 +184,8 @@
                                                 <label class="mb-2" for="activoPK.numeroActivo">[[#{activo.numero-activo}]]</label>
                                                 <div th:if="${habilitareditarpkjunta == true}">
                                                     <input type="number" class="form-control" name="activoPK.numeroActivo"
-                                                           th:field="*{activoPK.numeroActivo}" required="true" />
+                                                           th:field="*{activoPK.numeroActivo}" required="true"
+                                                           min="0" pattern="^[0-9]+" />
                                                     <span class="text-danger" th:if="${#fields.hasErrors('activoPK.numeroActivo')}" th:errors="*{activoPK.numeroActivo}">Error Número Activo</span>
                                                     <span class="text-danger" th:if="${activoestaasignado == true}">[[#{activo.mensaje-activoestaasignado}]]</span>
                                                 </div>
@@ -201,17 +203,20 @@
                                             <div class="form-group col-md-2">
                                                 <label class="mb-2" for="tomo">[[#{activo.tomo}]]</label>
                                                 <input type="number" class="form-control" name="tomo" 
-                                                       required="true" th:field="*{tomo}"/>
+                                                       required="true" th:field="*{tomo}"
+                                                       min="0" pattern="^[0-9]+" />
                                             </div>
                                             <div class="form-group col-md-2">
                                                 <label class="mb-2" for="folio">[[#{activo.folio}]]</label>
                                                 <input type="number" class="form-control" name="folio" 
-                                                       required="true" th:field="*{folio}"/>
+                                                       required="true" th:field="*{folio}"
+                                                       min="0" pattern="^[0-9]+" />
                                             </div>
                                             <div class="form-group col-md-2">
                                                 <label class="mb-2" for="asiento">[[#{activo.asiento}]]</label>
                                                 <input type="number" class="form-control" name="asiento" 
-                                                       required="true" th:field="*{asiento}"/>
+                                                       required="true" th:field="*{asiento}"
+                                                       min="0" pattern="^[0-9]+" />
                                             </div>
                                         </div>
 
